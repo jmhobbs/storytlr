@@ -137,7 +137,7 @@ class RssModel extends SourceModel {
 			$desc				= (string) $item->description;
 			if (strlen($desc) > strlen($content)) $content = $desc;
 
-			$data['content'] = htmLawed( $content, array( 'safe' => 1, 'tidy' => '2s0n' ) );
+			$data['content'] = htmLawed::tidy( $content, array( 'safe' => 1, 'tidy' => '2s0n' ) );
 
 			// Save the item in the database
 			$id = $this->addItem($data, $data['published'], SourceItem::BLOG_TYPE, false, false, false, $data['title']);

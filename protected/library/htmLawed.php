@@ -1,15 +1,14 @@
 <?php
-
 /*
-htmLawed 1.1.9, 22 December 2009
+htmLawed::tidy 1.1.9, 22 December 2009
 Copyright Santosh Patnaik
 GPL v3 license
-A PHP Labware internal utility; www.bioinformatics.org/phplabware/internal_utilities/htmLawed
+A PHP Labware internal utility; www.bioinformatics.org/phplabware/internal_utilities/htmLawed::tidy
 
-See htmLawed_README.txt/htm
+Modified into a class by John Hobbs - 2010
 */
-
-function htmLawed($t, $C=1, $S=array()){
+class htmLawed {
+public static function tidy($t, $C=1, $S=array()){
 $C = is_array($C) ? $C : array();
 if(!empty($C['valid_xhtml'])){
  $C['elements'] = empty($C['elements']) ? '*-center-dir-font-isindex-menu-s-strike-u' : $C['elements'];
@@ -58,7 +57,7 @@ if(!isset($C['base_url']) or !preg_match('`^[a-zA-Z\d.+\-]+://[^/]+/(.+?/)?$`', 
 }
 // config rest
 $C['and_mark'] = empty($C['and_mark']) ? 0 : 1;
-$C['anti_link_spam'] = (isset($C['anti_link_spam']) && is_array($C['anti_link_spam']) && count($C['anti_link_spam']) == 2 && (empty($C['anti_link_spam'][0]) or hl_regex($C['anti_link_spam'][0])) && (empty($C['anti_link_spam'][1]) or hl_regex($C['anti_link_spam'][1]))) ? $C['anti_link_spam'] : 0;
+$C['anti_link_spam'] = (isset($C['anti_link_spam']) && is_array($C['anti_link_spam']) && count($C['anti_link_spam']) == 2 && (empty($C['anti_link_spam'][0]) or htmLawed::hl_regex($C['anti_link_spam'][0])) && (empty($C['anti_link_spam'][1]) or htmLawed::hl_regex($C['anti_link_spam'][1]))) ? $C['anti_link_spam'] : 0;
 $C['anti_mail_spam'] = isset($C['anti_mail_spam']) ? $C['anti_mail_spam'] : 0;
 $C['balance'] = isset($C['balance']) ? (bool)$C['balance'] : 1;
 $C['cdata'] = isset($C['cdata']) ? $C['cdata'] : (empty($C['safe']) ? 3 : 0);
@@ -82,7 +81,7 @@ $C['xml:lang'] = isset($C['xml:lang']) ? $C['xml:lang'] : 0;
 
 if(isset($GLOBALS['C'])){$reC = $GLOBALS['C'];}
 $GLOBALS['C'] = $C;
-$S = is_array($S) ? $S : hl_spec($S);
+$S = is_array($S) ? $S : htmLawed::hl_spec($S);
 if(isset($GLOBALS['S'])){$reS = $GLOBALS['S'];}
 $GLOBALS['S'] = $S;
 
@@ -92,18 +91,18 @@ if($C['clean_ms_char']){
  $x = $x + ($C['clean_ms_char'] == 1 ? array("\x82"=>'&#8218;', "\x84"=>'&#8222;', "\x91"=>'&#8216;', "\x92"=>'&#8217;', "\x93"=>'&#8220;', "\x94"=>'&#8221;') : array("\x82"=>'\'', "\x84"=>'"', "\x91"=>'\'', "\x92"=>'\'', "\x93"=>'"', "\x94"=>'"'));
  $t = strtr($t, $x);
 }
-if($C['cdata'] or $C['comment']){$t = preg_replace_callback('`<!(?:(?:--.*?--)|(?:\[CDATA\[.*?\]\]))>`sm', 'hl_cmtcd', $t);}
-$t = preg_replace_callback('`&amp;([A-Za-z][A-Za-z0-9]{1,30}|#(?:[0-9]{1,8}|[Xx][0-9A-Fa-f]{1,7}));`', 'hl_ent', str_replace('&', '&amp;', $t));
+if($C['cdata'] or $C['comment']){$t = preg_replace_callback('`<!(?:(?:--.*?--)|(?:\[CDATA\[.*?\]\]))>`sm', 'htmLawed::hl_cmtcd', $t);}
+$t = preg_replace_callback('`&amp;([A-Za-z][A-Za-z0-9]{1,30}|#(?:[0-9]{1,8}|[Xx][0-9A-Fa-f]{1,7}));`', 'htmLawed::hl_ent', str_replace('&', '&amp;', $t));
 if($C['unique_ids'] && !isset($GLOBALS['hl_Ids'])){$GLOBALS['hl_Ids'] = array();}
 if($C['hook']){$t = $C['hook']($t, $C, $S);}
 if($C['show_setting'] && preg_match('`^[a-z][a-z0-9_]*$`i', $C['show_setting'])){
  $GLOBALS[$C['show_setting']] = array('config'=>$C, 'spec'=>$S, 'time'=>microtime());
 }
 // main
-$t = preg_replace_callback('`<(?:(?:\s|$)|(?:[^>]*(?:>|$)))|>`m', 'hl_tag', $t);
-$t = $C['balance'] ? hl_bal($t, $C['keep_bad'], $C['parent']) : $t;
+$t = preg_replace_callback('`<(?:(?:\s|$)|(?:[^>]*(?:>|$)))|>`m', 'htmLawed::hl_tag', $t);
+$t = $C['balance'] ? htmLawed::hl_bal($t, $C['keep_bad'], $C['parent']) : $t;
 $t = (($C['cdata'] or $C['comment']) && strpos($t, "\x01") !== false) ? str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05"), array('', '', '&', '<', '>'), $t) : $t;
-$t = $C['tidy'] ? hl_tidy($t, $C['tidy'], $C['parent']) : $t;
+$t = $C['tidy'] ? htmLawed::hl_tidy($t, $C['tidy'], $C['parent']) : $t;
 unset($C, $e);
 if(isset($reC)){$GLOBALS['C'] = $reC;}
 if(isset($reS)){$GLOBALS['S'] = $reS;}
@@ -111,7 +110,7 @@ return $t;
 // eof
 }
 
-function hl_attrval($t, $p){
+public static function hl_attrval($t, $p){
 // check attr val against $S
 $o = 1; $l = strlen($t);
 foreach($p as $k=>$v){
@@ -139,7 +138,7 @@ return ($o ? $t : (isset($p['default']) ? $p['default'] : 0));
 // eof
 }
 
-function hl_bal($t, $do=1, $in='div'){
+public static function hl_bal($t, $do=1, $in='div'){
 // balance tags
 // by content
 $cB = array('blockquote'=>1, 'form'=>1, 'map'=>1, 'noscript'=>1); // Block
@@ -207,7 +206,7 @@ for($i=-1, $ci=count($t); ++$i<$ci;){
   if(isset($cE[$e]) or !in_array($e, $q)){continue;} // Empty/unopen
   if($p == $e){array_pop($q); echo '</', $e, '>'; unset($e); continue;} // Last open
   $add = ''; // Nesting - close open tags that need to be
-  for($j=-1, $cj=count($q); ++$j<$cj;){  
+  for($j=-1, $cj=count($q); ++$j<$cj;){
    if(($d = array_pop($q)) == $e){break;}
    else{$add .= "</{$d}>";}
   }
@@ -291,7 +290,7 @@ return $o;
 // eof
 }
 
-function hl_cmtcd($t){
+public static function hl_cmtcd($t){
 // comment/CDATA sec handler
 $t = $t[0];
 global $C;
@@ -312,7 +311,7 @@ return str_replace(array('&', '<', '>'), array("\x03", "\x04", "\x05"), $t);
 // eof
 }
 
-function hl_ent($t){
+public static function hl_ent($t){
 // entitity handler
 global $C;
 $t = $t[1];
@@ -328,7 +327,7 @@ return ($C['and_mark'] ? "\x06" : '&'). '#'. (((ctype_digit($t) && $C['hexdec_en
 // eof
 }
 
-function hl_prot($p, $c=null){
+public static function hl_prot($p, $c=null){
 // check URL scheme
 global $C;
 $b = $a = '';
@@ -359,7 +358,7 @@ return "{$b}{$p}{$a}";
 // eof
 }
 
-function hl_regex($p){
+public static function hl_regex($p){
 // ?regex
 if(empty($p)){return 0;}
 if($t = ini_get('track_errors')){$o = isset($php_errormsg) ? $php_errormsg : null;}
@@ -375,10 +374,10 @@ return $r;
 // eof
 }
 
-function hl_spec($t){
+public static function hl_spec($t){
 // final $spec
 $s = array();
-$t = str_replace(array("\t", "\r", "\n", ' '), '', preg_replace('/"(?>(`.|[^"])*)"/sme', 'substr(str_replace(array(";", "|", "~", " ", ",", "/", "(", ")", \'`"\'), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\""), "$0"), 1, -1)', trim($t))); 
+$t = str_replace(array("\t", "\r", "\n", ' '), '', preg_replace('/"(?>(`.|[^"])*)"/sme', 'substr(str_replace(array(";", "|", "~", " ", ",", "/", "(", ")", \'`"\'), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08", "\""), "$0"), 1, -1)', trim($t)));
 for($i = count(($t = explode(';', $t))); --$i>=0;){
  $w = $t[$i];
  if(empty($w) or ($e = strpos($w, '=')) === false or !strlen(($a =  substr($w, $e+1)))){continue;}
@@ -392,8 +391,8 @@ for($i = count(($t = explode(';', $t))); --$i>=0;){
    if(empty($m) or ($p = strpos($m, '=')) == 0 or $p < 5){$y[$x] = 1; continue;}
    $y[$x][strtolower(substr($m, 0, $p))] = str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x06", "\x07", "\x08"), array(";", "|", "~", " ", ",", "/", "(", ")"), substr($m, $p+1));
   }
-  if(isset($y[$x]['match']) && !hl_regex($y[$x]['match'])){unset($y[$x]['match']);}
-  if(isset($y[$x]['nomatch']) && !hl_regex($y[$x]['nomatch'])){unset($y[$x]['nomatch']);}
+  if(isset($y[$x]['match']) && !htmLawed::hl_regex($y[$x]['match'])){unset($y[$x]['match']);}
+  if(isset($y[$x]['nomatch']) && !htmLawed::hl_regex($y[$x]['nomatch'])){unset($y[$x]['nomatch']);}
  }
  if(!count($y) && !count($n)){continue;}
  foreach(explode(',', substr($w, 0, $e)) as $v){
@@ -406,7 +405,7 @@ return $s;
 // eof
 }
 
-function hl_tag($t){
+public static function hl_tag($t){
 // tag/attribute handler
 global $C;
 $t = $t[0];
@@ -423,7 +422,7 @@ $a = str_replace(array("\n", "\r", "\t"), ' ', trim($m[3]));
 // tag transform
 static $eD = array('applet'=>1, 'center'=>1, 'dir'=>1, 'embed'=>1, 'font'=>1, 'isindex'=>1, 'menu'=>1, 's'=>1, 'strike'=>1, 'u'=>1); // Deprecated
 if($C['make_tag_strict'] && isset($eD[$e])){
- $trt = hl_tag2($e, $a, $C['make_tag_strict']);
+ $trt = htmLawed::hl_tag2($e, $a, $C['make_tag_strict']);
  if(!$e){return (($C['keep_bad']%2) ? str_replace(array('<', '>'), array('&lt;', '&gt;'), $t) : '');}
 }
 // close tag
@@ -500,11 +499,11 @@ foreach($aA as $k=>$v){
     static $sC = array('&#x20;'=>' ', '&#32;'=>' ', '&#x45;'=>'e', '&#69;'=>'e', '&#x65;'=>'e', '&#101;'=>'e', '&#x58;'=>'x', '&#88;'=>'x', '&#x78;'=>'x', '&#120;'=>'x', '&#x50;'=>'p', '&#80;'=>'p', '&#x70;'=>'p', '&#112;'=>'p', '&#x53;'=>'s', '&#83;'=>'s', '&#x73;'=>'s', '&#115;'=>'s', '&#x49;'=>'i', '&#73;'=>'i', '&#x69;'=>'i', '&#105;'=>'i', '&#x4f;'=>'o', '&#79;'=>'o', '&#x6f;'=>'o', '&#111;'=>'o', '&#x4e;'=>'n', '&#78;'=>'n', '&#x6e;'=>'n', '&#110;'=>'n', '&#x55;'=>'u', '&#85;'=>'u', '&#x75;'=>'u', '&#117;'=>'u', '&#x52;'=>'r', '&#82;'=>'r', '&#x72;'=>'r', '&#114;'=>'r', '&#x4c;'=>'l', '&#76;'=>'l', '&#x6c;'=>'l', '&#108;'=>'l', '&#x28;'=>'(', '&#40;'=>'(', '&#x29;'=>')', '&#41;'=>')', '&#x20;'=>':', '&#32;'=>':', '&#x22;'=>'"', '&#34;'=>'"', '&#x27;'=>"'", '&#39;'=>"'", '&#x2f;'=>'/', '&#47;'=>'/', '&#x2a;'=>'*', '&#42;'=>'*', '&#x5c;'=>'\\', '&#92;'=>'\\');
     $v = strtr($v, $sC);
    }
-   $v = preg_replace_callback('`(url(?:\()(?: )*(?:\'|"|&(?:quot|apos);)?)(.+)((?:\'|"|&(?:quot|apos);)?(?: )*(?:\)))`iS', 'hl_prot', $v);
+   $v = preg_replace_callback('`(url(?:\()(?: )*(?:\'|"|&(?:quot|apos);)?)(.+)((?:\'|"|&(?:quot|apos);)?(?: )*(?:\)))`iS', 'htmLawed::hl_prot', $v);
    $v = !$C['css_expression'] ? preg_replace('`expression`i', ' ', preg_replace('`\\\\\S|(/|(%2f))(\*|(%2a))`i', ' ', $v)) : $v;
   }elseif(isset($aNP[$k]) or strpos($k, 'src') !== false or $k[0] == 'o'){
    $v = str_replace("\xad", ' ', (strpos($v, '&') !== false ? str_replace(array('&#xad;', '&#173;', '&shy;'), ' ', $v) : $v));
-   $v = hl_prot($v, $k);
+   $v = htmLawed::hl_prot($v, $k);
    if($k == 'href'){ // X-spam
     if($C['anti_mail_spam'] && strpos($v, 'mailto:') === 0){
      $v = str_replace('@', htmlspecialchars($C['anti_mail_spam']), $v);
@@ -522,7 +521,7 @@ foreach($aA as $k=>$v){
     }
    }
   }
-  if(isset($rl[$k]) && is_array($rl[$k]) && ($v = hl_attrval($v, $rl[$k])) === 0){continue;}
+  if(isset($rl[$k]) && is_array($rl[$k]) && ($v = htmLawed::hl_attrval($v, $rl[$k])) === 0){continue;}
   $a[$k] = str_replace('"', '&quot;', $v);
  }
 }
@@ -615,7 +614,7 @@ else{return $C['hook_tag']($e, $a);}
 // eof
 }
 
-function hl_tag2(&$e, &$a, $t=1){
+public static function hl_tag2(&$e, &$a, $t=1){
 // transform tag
 if($e == 'center'){$e = 'div'; return 'text-align: center;';}
 if($e == 'dir' or $e == 'menu'){$e = 'ul'; return '';}
@@ -640,7 +639,7 @@ return '';
 // eof
 }
 
-function hl_tidy($t, $w, $p){
+public static function hl_tidy($t, $w, $p){
 // Tidy/compact HTM
 if(strpos(' pre,script,textarea', "$p,")){return $t;}
 $t = str_replace(' </', '</', preg_replace(array('`(<\w[^>]*(?<!/)>)\s+`', '`\s+`', '`(<\w[^>]*(?<!/)>) `'), array(' $1', ' ', '$1'), preg_replace_callback(array('`(<(!\[CDATA\[))(.+?)(\]\]>)`sm', '`(<(!--))(.+?)(-->)`sm', '`(<(pre|script|textarea).*?>)(.+?)(</\2>)`sm'), create_function('$m', 'return $m[1]. str_replace(array("<", ">", "\n", "\r", "\t", " "), array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), $m[3]). $m[4];'), $t)));
@@ -662,7 +661,7 @@ for($i=-1, $j=count($t); ++$i<$j;){
  $r = ''; list($e, $r) = explode('>', $t[$i]);
  $x = $e[0] == '/' ? 0 : (substr($e, -1) == '/' ? 1 : ($e[0] != '!' ? 2 : -1));
  $y = !$x ? ltrim($e, '/') : ($x > 0 ? substr($e, 0, strcspn($e, ' ')) : 0);
- $e = "<$e>"; 
+ $e = "<$e>";
  if(isset($d[$y])){
   if(!$x){echo "\n", str_repeat($s, --$n), "$e\n", str_repeat($s, $n);}
   else{echo "\n", str_repeat($s, $n), "$e\n", str_repeat($s, ($x != 1 ? ++$n : $n));}
@@ -686,13 +685,13 @@ return str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array(
 // eof
 }
 
-function hl_version(){
+public static function hl_version(){
 // rel
 return '1.1.9';
 // eof
 }
 
-function kses($t, $h, $p=array('http', 'https', 'ftp', 'news', 'nntp', 'telnet', 'gopher', 'mailto')){
+public static function kses($t, $h, $p=array('http', 'https', 'ftp', 'news', 'nntp', 'telnet', 'gopher', 'mailto')){
 // kses compat
 foreach($h as $k=>$v){
  $h[$k]['n']['*'] = 1;
@@ -700,14 +699,15 @@ foreach($h as $k=>$v){
 $C['cdata'] = $C['comment'] = $C['make_tag_strict'] = $C['no_deprecated_attr'] = $C['unique_ids'] = 0;
 $C['keep_bad'] = 1;
 $C['elements'] = count($h) ? strtolower(implode(',', array_keys($h))) : '-*';
-$C['hook'] = 'kses_hook';
+$C['hook'] = 'htmLawed::kses_hook';
 $C['schemes'] = '*:'. implode(',', $p);
-return htmLawed($t, $C, $h);
+return htmLawed::tidy($t, $C, $h);
 // eof
 }
 
-function kses_hook($t, &$C, &$S){
+public static function kses_hook($t, &$C, &$S){
 // kses compat
 return $t;
 // eof
+}
 }

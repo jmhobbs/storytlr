@@ -109,7 +109,7 @@ class GooglereaderModel extends SourceModel {
 
 			$timestamp = ($time == 'now') ? time() : strtotime((string) $data['published']);
 
-			$data['content'] = htmLawed( $content, array( 'safe' => 1, 'tidy' => '2s0n' ) );
+			$data['content'] = htmLawed::tidy( $content, array( 'safe' => 1, 'tidy' => '2s0n' ) );
 
 			$id = $this->addItem($data, $timestamp, SourceItem::LINK_TYPE, false, false, false, $data['title']);
 			if ($id) $result[] = $id;
