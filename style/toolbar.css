@@ -1,0 +1,136 @@
+@CHARSET "UTF-8";
+/*
+ *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ *  STYLESHEET FOR ADMIN BAR ON PUBLIC SITE
+ */
+
+body {
+	margin: 0;
+	padding: 0;	
+}
+
+#adminbar {
+	height: 31px; 
+	width: 100%;
+	color: #ffffff;
+	background: black url('../images/admin-bg.gif') repeat-x;
+	font-size: 12px;
+	background-position: 0 0;
+	font-family: 'Lucida Grande', Verdana, Arial, Sans-Serif;
+	border-bottom: 1px solid #444;
+	padding: 0;
+}
+
+#adminbar div#logo {
+	padding:0;
+	margin: 0;
+	float: left;
+}
+
+#adminbar div {
+	padding: 4px;
+	height: 23px;
+}
+
+#adminbar .signedin{
+	color: #ffffff;
+}
+
+#adminbar .signedin strong{
+	color: #ffffff;
+}
+
+#adminbar div#loginStatus a, #adminbar div#loginStatus a:visited{
+	color: #D0EB5F;
+	text-decoration: none;
+	}
+
+#adminbar div#loginStatus a:hover {
+	color: #D0EB5F;
+	text-decoration: underline;
+	}
+	
+#adminbar div#loginStatus {
+	float: right;
+	padding-right: 15px;
+	padding-top: 7px;
+	color: white;
+}
+
+#adminbar div#loginStatus strong {
+	color: #aaa;
+	padding-right: 15px;
+}
+
+#adminbar div#login{
+	float: left;
+}
+
+#adminbar #navigationMenu{
+}
+
+#adminbar #navigationMenu ul{
+	margin:0 0 0 100px;
+	padding:0;
+	list-style-type:none;
+	font-weight: normal;
+}
+
+#adminbar #navigationMenu ul li{
+	display:block;float:left;
+}
+
+#adminbar #navigationMenu ul li a{
+	display:block;float:left;
+	padding:3px 5px 0;
+	color: #D0EB5F;
+	text-decoration: none;
+}
+
+#adminbar #navigationMenu ul li a:hover {
+	text-decoration: underline;
+	border: none;
+}
+
+#adminbar #navigationMenu ul li a.current {
+	color: #fff;
+	text-decoration: none;
+	border: none;
+}
+
+#adminbar form#formLogin {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+#adminbar form#formLogin input{
+	width: 75px;
+	vertical-align: middle;
+}
+
+#adminbar form#formLogin input.remember{
+	width: 16px;
+	margin-top: 0;
+}
+
+#adminbar form#formLogin input#username, form#formLogin input#password {
+	background-color: #666;
+	color: white;
+	border: 1px solid #aaa;
+	padding: 3px;
+	margin-right: 5px;	
+}

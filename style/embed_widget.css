@@ -1,0 +1,73 @@
+@CHARSET "UTF-8";
+/*
+ *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *
+ *  Licensed under the Apache License, Version 2.0 (the "License");
+ *  you may not use this file except in compliance with the License.
+ *  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *  Unless required by applicable law or agreed to in writing, software
+ *  distributed under the License is distributed on an "AS IS" BASIS,
+ *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  See the License for the specific language governing permissions and
+ *  limitations under the License.
+ *  
+ *  STYLESHEET FOR EMBED WIDGET
+ */
+
+div#storytlr {
+	margin:0;
+	padding: 10px;
+	color:#333333;
+	font: 11px Arial;
+	text-align: left;
+	background: transparent;
+}
+
+div#storytlr div.bar {
+	width: 100%;
+	text-align: right;	
+}
+
+div#storytlr h1 {
+	font-size: 13px;
+	margin: 0 0 5px 0;	
+}
+
+div#storytlr h2 {
+	font-size: 11px;
+	text-transform: uppercase;
+	font-weight: normal;
+	margin: 0 0 5px 0;	
+}
+
+div#storytlr table {
+	border: collapse;
+	padding: 0;
+	margin: 0;
+}
+
+div#storytlr table td.icon{
+	width: 20px;
+	padding: 0 0 5px 0;
+	margin: 0;
+}
+
+div#storytlr table td.title{
+	padding: 0 0 5px 0;
+	margin: 0;
+}
+
+div#storytlr a {
+	font-size: 12px;
+	font-weight: bold;
+}
+
+div#storytlr img {
+	border: none;	
+}
+
+
+
