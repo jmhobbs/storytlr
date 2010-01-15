@@ -1,0 +1,3 @@
+[submodule "protected/application/plugins/github"]
+	path = protected/application/plugins/github
+	url = git@github.com:jmhobbs/storytlr-plugin-github.git
