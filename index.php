@@ -8,12 +8,13 @@ $root = dirname(__FILE__);
 // TODO this should be moved to the boostrap file
 set_include_path(
       $root . '/protected/application' . PATH_SEPARATOR
-    . $root . '/protected/application/admin/models' . PATH_SEPARATOR    
+    . $root . '/protected/application/admin/models' . PATH_SEPARATOR
     . $root . '/protected/application/public/models' . PATH_SEPARATOR
     . $root . '/protected/application/pages/models' . PATH_SEPARATOR
     . $root . '/protected/application/widgets/models' . PATH_SEPARATOR
     . $root . '/protected/library' . PATH_SEPARATOR
     . $root . '/protected/library/Feedcreator' . PATH_SEPARATOR
+    . $root . '/protected/library/htmLawed' . PATH_SEPARATOR
     . get_include_path()
 );
 
