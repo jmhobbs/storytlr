@@ -13,22 +13,22 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  
+ *
  */
 class RssModel extends SourceModel {
 
 	protected $_name 	= 'rss_data';
 
 	protected $_prefix = 'rss';
-	
+
 	protected $_search  = 'title';
-	
+
 	protected $_update_tweet = "Syndicated %d blog entries on my Lifestream %s";
 
 	public function getServiceName() {
 		return "RSS";
 	}
-	
+
 	public function isStoryElement() {
 		return true;
 	}
@@ -49,7 +49,7 @@ class RssModel extends SourceModel {
 			return false;
 		}
 	}
-	
+
 	public function getTitle() {
 		if ($name = $this->getProperty('title')) {
 			return $name;
@@ -68,7 +68,7 @@ class RssModel extends SourceModel {
 		catch (Zend_Feed_Exception $e) {
 			return 0;
 		}
-		
+
 		if (!$feeds) {
 			try {
 				$items = Zend_Feed::import($url);
@@ -81,7 +81,7 @@ class RssModel extends SourceModel {
 			$items = $feeds[0];
 			$feed_url = Zend_Feed::getHttpClient()->getUri(true);
 		}
-		
+
 		$title = $items->title();
 		$this->setProperty('feed_title', $title);
 		$this->setProperty('feed_url', $feed_url);
@@ -101,25 +101,20 @@ class RssModel extends SourceModel {
 		} catch (Zend_Feed_Exception $e) {
 			return;
 		}
-	
+
 		// Mark as updated (could have been with errors)
 		$this->markUpdated();
 	}
 
 	private function processItems($items) {
 		$result = array();
-		$tidy = new tidy();		
-		$config = array(
-           'indent'         => true,
-           'output-xhtml'   => true,
-           'wrap'           => 200);
 
-        foreach ($items as $item) {
+		foreach ($items as $item) {
 			$data		= array();
-			
+
 			// Fetch the title
 			$data['title'] = (string) $item->title();
-			
+
 			// Fetch the link
 			$link 			= $item->link;
 			if (is_array($link)) {
@@ -129,46 +124,43 @@ class RssModel extends SourceModel {
 				$link = $link['href'];
 			}
 			$data['link']		= $link;
-			
+
 			// Date
 			$pubDate			= strtotime((string) $item->pubDate);		// For RSS entries
-			$published			= strtotime((string) $item->published); 	// For Atom entries	
+			$published			= strtotime((string) $item->published); 	// For Atom entries
 			$updated			= strtotime((string) $item->updated); 	// For Atom entries
-						
+
 			$data['published']	= max($pubDate, $published, $updated);
-			
+
 			//Content
 			$content		 	= (string) $item->content;
-			$desc				= (string) $item->description;	
+			$desc				= (string) $item->description;
 			if (strlen($desc) > strlen($content)) $content = $desc;
-	
-			// Tidy !
-			$tidy->parseString($content, $config, 'utf8');
-			$tidy->cleanRepair();
-			$data['content'] = $tidy;	
-			
+
+			$data['content'] = htmLawed::tidy( $content, array( 'safe' => 1, 'tidy' => '2s0n' ) );
+
 			// Save the item in the database
 			$id = $this->addItem($data, $data['published'], SourceItem::BLOG_TYPE, false, false, false, $data['title']);
-			if ($id) $result[] = $id;	
+			if ($id) $result[] = $id;
 			if (count($result)> 100) break;
 		}
-		unset($tidy);
+
 		return $result;
 	}
-	
+
 	public function getConfigForm($populate=false) {
 		$form = new Stuffpress_Form();
-		
+
 		// Add the blog url element
 		$element = $form->createElement('text', 'url', array('label' => 'Feed URL', 'decorators' => $form->elementDecorators));
 		$element->setRequired(true);
-		$form->addElement($element);  
-		
+		$form->addElement($element);
+
 		// Add the blog title element
 		$element = $form->createElement('text', 'title', array('label' => 'Title', 'decorators' => $form->elementDecorators));
 		$element->setRequired(false);
-		$form->addElement($element);  
-		
+		$form->addElement($element);
+
 		// Options
 		$options = array();
 		if ($this->getPropertyDefault('hide_content')) $options[] = 'hide_content';
@@ -177,7 +169,8 @@ class RssModel extends SourceModel {
 			'multiOptions' => array(
 			'hide_content' 	=> 'Hide blog post (only title will be shown)'
 			)
-		)); 
+		));
+
 		$e->setLabel('Options');
 		$e->setValue($options);
 		$form->addElement($e);
@@ -193,12 +186,12 @@ class RssModel extends SourceModel {
 
 		return $form;
 	}
-	
+
 	public function processConfigForm($form) {
 		$values = $form->getValues();
 		$options = $values['options'];
 		$update	= false;
-		
+
 		if($values['url'] != $this->getProperty('url')) {
 			$this->_properties->setProperty('url',   $values['url']);
 			$update = true;
@@ -206,7 +199,7 @@ class RssModel extends SourceModel {
 
 		$hide_content = @in_array('hide_content',$options) ? 1 : 0;
 		$this->_properties->setProperty('hide_content', $hide_content);
-		
+
 		$this->_properties->setProperty('title', $values['title']);
 		return $update;
 	}
