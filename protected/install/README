@@ -1,0 +1,4 @@
+There are several files here.  This is to facilitate moving between the official Storytlr code and my fork.  Read carefully!
+=========
+database.sql - For a fresh install, entirely from this codebase.
+migration-0.9.2.sql - Migrating from "official" 0.9.2 to this codebase.
