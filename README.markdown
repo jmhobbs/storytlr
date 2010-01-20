@@ -8,4 +8,30 @@ And...
 
 # More information #
 
-You can find more information online at http://storytlr.googlecode.com/
+You can find more information about Storytlr online at [http://storytlr.googlecode.com/](http://storytlr.googlecode.com/)
+
+# What else is in this fork? #
+
+This fork includes several patches not present in 0.9.2 core.
+
+* A tool to rename users (dangerous if not handled properly)
+* Plugins built in for: github, goodreads, foursquare
+* Ability to delete items that are from other sources (not just ones from Storytlr itself)
+* tidy is replaced by htmLawed
+* The latest Zend framework is included (for better or worse :-)
+
+# Installation #
+
+1. Clone the repo to where you want it
+2. Edit /protected/config/config.ini
+3. Load /protected/install/database.sql
+4. Sign in with user "admin" password "storytlr"
+5. Change your password
+6. Install sources
+
+# Switch From 0.9.2 Core #
+
+1. Clone the repo over your source (or out of tree and switch them)
+2. Load /protected/install/migration-0.9.2.sql
+3. Check your /protected/config/config.ini
+4. Enjoy
