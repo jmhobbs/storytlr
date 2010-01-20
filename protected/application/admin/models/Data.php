@@ -13,7 +13,7 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  
+ *
  */
 
 class Data extends Stuffpress_Db_Table
@@ -22,9 +22,9 @@ class Data extends Stuffpress_Db_Table
 	protected $_name = 'data';
 
 	protected $_primary = 'id';
-	
+
 	private $_tags_table;
-	
+
 	public function setUser($user = 0) {
 		$this->_user = $user;
 		if (isset($this->_tags_table)) {
@@ -34,7 +34,7 @@ class Data extends Stuffpress_Db_Table
 
 	public function getItem($source, $id) {
 
-		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug, d.latitude, d.longitude, d.elevation, d.has_location, s.enabled, s.public, s.imported "
+		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_unwanted, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug, d.latitude, d.longitude, d.elevation, d.has_location, s.enabled, s.public, s.imported "
 		. "FROM data d LEFT JOIN sources s ON (d.source_id = s.id) "
 		. "WHERE d.id = :id AND d.source_id = :source "
 		. "ORDER BY timestamp DESC "
@@ -54,11 +54,11 @@ class Data extends Stuffpress_Db_Table
 		if (!$sources) {
 			$sources = 	$this->getSources();
 		}
-		
+
 		if (!$sources || count($sources) == 0) {
 			return false;
 		}
-		
+
 		$sources = implode(',', $sources);
 
 		if ($types) {
@@ -69,9 +69,9 @@ class Data extends Stuffpress_Db_Table
 			$t = implode(',', $t);
 		}
 
-		$sql = "SELECT id, source_id, service, UNIX_TIMESTAMP(timestamp) as timestamp, is_hidden, user_id, comment_count, tag_count, slug, latitude, longitude, elevation, has_location "
+		$sql = "SELECT id, source_id, service, UNIX_TIMESTAMP(timestamp) as timestamp, is_unwanted, is_hidden, user_id, comment_count, tag_count, slug, latitude, longitude, elevation, has_location "
 		. "FROM data d "
-		. "WHERE d.user_id = :user_id AND source_id IN ($sources) "
+		. "WHERE d.user_id = :user_id AND source_id IN ($sources) AND is_unwanted = 0 "
 		. ((!$show_hidden) ? "AND is_hidden = 0 " : " ")
 		. (($types) ? "AND type IN ($t) " : " ")
 		. (($location_only) ? "AND has_location = true " : " ")
@@ -94,9 +94,9 @@ class Data extends Stuffpress_Db_Table
 		}
 		$sources = implode(',', $sources);
 
-		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
+		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_unwanted, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
 		. "FROM data d "
-		. "WHERE d.user_id = :user_id AND source_id IN ($sources) "
+		. "WHERE d.user_id = :user_id AND source_id IN ($sources) AND is_unwanted = 0 "
 		. ((!$show_hidden) ? "AND is_hidden = 0 " : " ")
 		. "AND YEAR(d.timestamp) = :year AND MONTH(d.timestamp) = :month "
 		. "ORDER BY timestamp "
@@ -112,7 +112,7 @@ class Data extends Stuffpress_Db_Table
 	}
 
 	public function getItemsByTag($tags, $sources=false, $count=10, $offset=0, $show_hidden=0) {
-			
+
 		// Prepare the tag filter
 		if (!$tags || count($tags)<=0) {
 			return;
@@ -122,7 +122,7 @@ class Data extends Stuffpress_Db_Table
 			$t[] = "'" . mysql_escape_string($tag) . "'";
 		}
 		$tags = implode(',', $t);
-		
+
 		// Prepare the sources list
 		if (!$sources) {
 			$sources = 	$this->getSources();
@@ -131,11 +131,11 @@ class Data extends Stuffpress_Db_Table
 			return false;
 		}
 		$sources = implode(',', $sources);
-		
-		
-		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug, t.tag "
+
+
+		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_unwanted, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug, t.tag "
 		. "FROM data d LEFT JOIN tags t ON d.source_id = t.source_id AND d.id = t.item_id "
-		. "WHERE d.user_id = :user_id AND d.source_id IN ($sources) AND symbol IN ($tags) "
+		. "WHERE d.user_id = :user_id AND d.source_id IN ($sources) AND symbol IN ($tags) AND is_unwanted = 0 "
 		. ((!$show_hidden) ? "AND is_hidden = 0 " : " ")
 		. "GROUP BY id ORDER BY timestamp DESC "
 		. "LIMIT $count OFFSET $offset ";
@@ -147,9 +147,9 @@ class Data extends Stuffpress_Db_Table
 		$result	= $this->arrayToItems($rows);
 
 		return $result;
-		
+
 	}
-	
+
 	public function getItemsPerMonth($show_hidden=0) {
 
 		if (!$sources = $this->getSources()) {
@@ -159,7 +159,7 @@ class Data extends Stuffpress_Db_Table
 
 		$sql = "SELECT count(d.id) as c, year(d.timestamp) as year, month(d.timestamp) as month "
 		. "FROM data d "
-		. "WHERE d.user_id = :user_id AND source_id IN ($sources) "
+		. "WHERE d.user_id = :user_id AND source_id IN ($sources) AND d.is_unwanted = 0 "
 		. (($show_hidden) ? "AND is_hidden = 0 " : " ")
 		. "GROUP BY year, month "
 		. "ORDER BY year DESC, month DESC ";
@@ -179,9 +179,9 @@ class Data extends Stuffpress_Db_Table
 		}
 		$sources = implode(',', $sources);
 
-		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
+		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_unwanted, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
 		. "FROM data d "
-		. "WHERE d.user_id = :user_id AND source_id IN ($sources) "
+		. "WHERE d.user_id = :user_id AND source_id IN ($sources) AND d.is_unwanted = 0 "
 		. ((!$show_hidden) ? "AND is_hidden = 0 " : " ")
 		. (($source_id) ? "AND source_id = $source_id " : " ")
 		. "HAVING timestamp>$from AND timestamp<$to "
@@ -214,9 +214,9 @@ class Data extends Stuffpress_Db_Table
 
 	public function getAllItems($source_id) {
 
-		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
+		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_unwanted, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
 		. "FROM data d "
-		. "WHERE d.source_id = $source_id "
+		. "WHERE d.source_id = $source_id AND d.is_unwanted = 0 "
 		. "ORDER BY timestamp DESC ";
 
 		$stmt 	= $this->_db->query($sql);
@@ -230,9 +230,9 @@ class Data extends Stuffpress_Db_Table
 
 	public function search($source_id, $service, $index, $term, $show_hidden=0) {
 
-		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
+		$sql = "SELECT d.id, d.source_id, d.service, UNIX_TIMESTAMP(d.timestamp) as timestamp, d.is_unwanted, d.is_hidden, d.user_id, d.comment_count, d.tag_count, d.slug "
 		. "FROM {$service}_data t LEFT JOIN data d ON (t.id = d.id AND t.source_id = d.source_id) "
-		. "WHERE MATCH($index) AGAINST(:term) AND t.source_id= :source_id "
+		. "WHERE MATCH($index) AGAINST(:term) AND t.source_id= :source_id AND d.is_unwanted = 0 "
 		. ((!$show_hidden) ? "AND is_hidden = 0 " : " ")
 		. "ORDER BY timestamp DESC ";
 
@@ -241,16 +241,16 @@ class Data extends Stuffpress_Db_Table
 		$stmt   = $this->_db->query($sql, $data);
 		$rows   = $stmt->fetchAll();
 		$result = $this->arrayToItems($rows);
-		
+
 		return $result;
 	}
 
 	public function addItem($id, $source_id, $user_id, $service, $type, $timestamp, $is_hidden=0) {
-		
+
 		$is_hidden = $is_hidden ? 1 : 0;
-		
-		$sql = "INSERT INTO `data` (id, source_id, user_id, service, type, timestamp, is_hidden) "
-		. "VALUES (:id, :source_id, :user_id, :service, :type, FROM_UNIXTIME(:timestamp), :is_hidden)";
+
+		$sql = "INSERT INTO `data` (id, source_id, user_id, service, type, timestamp, is_hidden, is_unwanted) "
+		. "VALUES (:id, :source_id, :user_id, :service, :type, FROM_UNIXTIME(:timestamp), :is_hidden, 0)";
 
 		$data = array(":id" => $id,
 					  ":source_id" 	=> $source_id,
@@ -291,6 +291,19 @@ class Data extends Stuffpress_Db_Table
 		return;
 	}
 
+	public function unwantItem( $source_id, $item_id ) {
+		$sql = "UPDATE `data` SET is_unwanted = 1 "
+		. "WHERE `source_id`=:source_id AND `id`=:item_id";
+
+
+		$data = array(":source_id" 	=> $source_id,
+					  ":item_id"	=> $item_id);
+
+		$stmt 	= $this->_db->query($sql, $data);
+
+		return;
+	}
+
 	public function showItem($source_id, $item_id) {
 		$sql = "UPDATE `data` SET is_hidden = 0 "
 		. "WHERE `source_id`=:source_id AND `id`=:item_id";
@@ -317,7 +330,7 @@ class Data extends Stuffpress_Db_Table
 
 		return;
 	}
-	
+
 	public function setLocation($source_id, $item_id, $latitude, $longitude, $elevation=0, $accuracy=0) {
 		$sql = "UPDATE `data` SET latitude = :latitude, longitude = :longitude, elevation=:elevation, accuracy=:accuracy, has_location=true "
 			 . "WHERE `source_id`=:source_id AND `id`=:item_id";
@@ -329,12 +342,12 @@ class Data extends Stuffpress_Db_Table
 					  ":longitude"  => $longitude,
 					  ":elevation"  => $elevation,
 					  ":accuracy"   => $accuracy);
-				
+
 		$stmt 	= $this->_db->query($sql, $data);
 
 		return;
 	}
-	
+
 	public function clearLocation($source_id, $item_id) {
 		$sql = "UPDATE `data` SET latitude = 0, longitude = 0, elavation= 0, has_location=false "
 			 . "WHERE `source_id`=:source_id AND `id`=:item_id";
@@ -342,12 +355,12 @@ class Data extends Stuffpress_Db_Table
 
 		$data = array(":source_id" 	=> $source_id,
 					  ":item_id"	=> $item_id);
-				
+
 		$stmt 	= $this->_db->query($sql, $data);
 
 		return;
 	}
-	
+
 	public function setTags($source_id, $item_id, $tags) {
 		$this->_db->beginTransaction();
 		$tags_table = $this->getTagsTable();
@@ -362,9 +375,9 @@ class Data extends Stuffpress_Db_Table
 		}
 		$count	= $tags ? count($tags) : 0;
 		$this->setTagCount($source_id, $item_id, $tag_count);
-		$this->_db->commit();	
+		$this->_db->commit();
 	}
-	
+
 	public function setTagCount($source_id, $item_id, $count) {
 		$sql = "UPDATE `data` SET tag_count = :count "
 		. "WHERE `source_id`=:source_id AND `id`=:item_id";
@@ -378,7 +391,7 @@ class Data extends Stuffpress_Db_Table
 
 		return;
 	}
-	
+
 	public function setSlug($source_id, $item_id, $slug) {
 		$sql = "UPDATE `data` SET slug = :slug "
 		. "WHERE `source_id`=:source_id AND `id`=:item_id";
@@ -458,7 +471,7 @@ class Data extends Stuffpress_Db_Table
 		$sources = $stmt->fetchAll(Zend_Db::FETCH_COLUMN, 0);
 		return $sources;
 	}
-	
+
 	private function getTagsTable() {
 		if (!$this->_tags_table) {
 			$this->_tags_table = new Tags();

@@ -1013,3 +1013,5 @@ CREATE TABLE `goodreads_data` (
   FULLTEXT KEY `SEARCH` (`content`, `title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
+
+ALTER TABLE `data` ADD COLUMN `is_unwanted` TINYINT(1)  NOT NULL DEFAULT 0 AFTER `timestamp`;
