@@ -4,3 +4,6 @@
 [submodule "protected/application/plugins/foursquare"]
 	path = protected/application/plugins/foursquare
 	url = git://github.com/jmhobbs/storytlr-plugin-foursquare.git
+[submodule "protected/application/plugins/goodreads"]
+	path = protected/application/plugins/goodreads
+	url = git://github.com/jmhobbs/storytlr-plugin-goodreads.git
