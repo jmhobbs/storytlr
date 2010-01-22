@@ -225,8 +225,8 @@ abstract class SourceModel extends Stuffpress_Db_Table
 	public function markUpdated ( $last_modified='Thu, 15 Apr 2004 12:00:00 GMT', $etag='' ) {
 		if (!($id = $this->getID())) return;
 		$sql = "UPDATE `sources` SET last_update = CURRENT_TIMESTAMP, last_modified = :last_modified, last_etag = :etag WHERE `id`=:source_id";
-		$data = array( ":source_id" => $id, ":last_modified" => $last_modified, ":last_etag" => $etag );
-		$stmt 	= $this->_db->query($sql, $data);
+		$data = array( ":source_id" => $id, ":last_modified" => $last_modified, ":etag" => $etag );
+		$stmt = $this->_db->query($sql, $data);
 	}
 
 	public function getConfigForm($populate=false) {
@@ -353,12 +353,10 @@ abstract class SourceModel extends Stuffpress_Db_Table
 		return $this->_data_table;
 	}
 
-	private function getWebRequest ( $url ) {
+	protected function getWebRequest ( $url ) {
 		$wr = new Stuffpress_WebRequest( $url );
 		$wr->set_etag( $this->_source['last_etag'] );
 		$wr->set_last_modified( $this->_source['last_modified'] );
 		return $wr;
 	}
 }
-
-

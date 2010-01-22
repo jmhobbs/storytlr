@@ -25,18 +25,21 @@ class Stuffpress_WebRequest {
 	}
 
 	public function set_etag ( $etag ) {
-		if( ! empty( trim( $etag ) ) )
+		$etag = str_replace( '"', '', $etag );
+		if( ! empty( $etag ) )
 			$this->_headers[] = "If-None-Match: \"$etag\"";
 	}
 
 	public function set_last_modified ( $last_modified ) {
-		$this->_headers[] = "If-Modified-Since: $last_modified";
+		if( ! empty( $last_modified ) )
+			$this->_headers[] = "If-Modified-Since: $last_modified";
 	}
 
 	public function get () {
 		try {
-			$http = new Zend_Http_Client( $this->_url, $this->_headers );
-			$this->_response = $http->get();
+			$http = new Zend_Http_Client( $this->_url );
+			$http->setHeaders( $this->_headers );
+			$this->_response = $http->request( "GET" );
 			if( $this->_response->isSuccessful() ) {
 				return true;
 			}
@@ -54,7 +57,7 @@ class Stuffpress_WebRequest {
 
 	public function get_response_body () { return $this->_response->getBody(); }
 	public function get_response_headers () { return $this->_response->getHeaders(); }
-	public function get_response_last_modified () { return $this->_resonse->getHeader( 'Last-Modified' ); }
-	public function get_response_etag () { return $this->_resonse->getHeader( 'ETag' ); }
+	public function get_response_last_modified () { return $this->_response->getHeader( 'Last-Modified' ); }
+	public function get_response_etag () { return $this->_response->getHeader( 'ETag' ); }
 
 }
