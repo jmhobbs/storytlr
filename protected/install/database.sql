@@ -524,6 +524,8 @@ CREATE TABLE `sources` (
   `public` tinyint(1) NOT NULL default '1',
   `imported` tinyint(1) NOT NULL default '0',
   `last_update` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `last_modified` varchar(35) NOT NULL default 'Thu, 15 Apr 2004 12:00:00 GMT',
+  `last_etag` varchar(25) NOT NULL default '',
   PRIMARY KEY  USING BTREE (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
