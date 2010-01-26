@@ -12,13 +12,12 @@ You can find more information about Storytlr online at [http://storytlr.googleco
 
 # What else is in this fork? #
 
-This fork includes several patches not present in 0.9.2 core.
+This fork is a working copy that  includes several patches not present in 0.9.2.  Eventually most of these changes will find their way into core.
 
 * A tool to rename users (dangerous if not handled properly)
 * Plugins built in for: github, goodreads, foursquare
 * Ability to delete items that are from other sources (not just ones from Storytlr itself)
 * tidy is replaced by htmLawed
-* The latest Zend framework is included (for better or worse :-)
 
 # Installation #
 
@@ -35,3 +34,7 @@ This fork includes several patches not present in 0.9.2 core.
 2. Load /protected/install/migration-0.9.2.sql
 3. Check your /protected/config/config.ini
 4. Enjoy
+
+# Help! #
+
+To get help for _this specific_ fork, you can contact me on twitter @jmhobbs
