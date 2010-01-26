@@ -13,8 +13,7 @@
 
 	// TODO this should be moved to the boostrap file
 	set_include_path(
-			$root . '/library/Zend' . PATH_SEPARATOR
-		. $root . '/application' . PATH_SEPARATOR
+		  $root . '/application' . PATH_SEPARATOR
 		. $root . '/application/admin/models' . PATH_SEPARATOR
 		. $root . '/application/public/models' . PATH_SEPARATOR
 		. $root . '/library' . PATH_SEPARATOR

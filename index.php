@@ -7,8 +7,7 @@ $root = dirname(__FILE__);
 // We're assuming the Zend Framework is already on the include_path
 // TODO this should be moved to the boostrap file
 set_include_path(
-			$root . '/protected/library/Zend' . PATH_SEPARATOR
-		. $root . '/protected/application' . PATH_SEPARATOR
+		  $root . '/protected/application' . PATH_SEPARATOR
 		. $root . '/protected/application/admin/models' . PATH_SEPARATOR
 		. $root . '/protected/application/public/models' . PATH_SEPARATOR
 		. $root . '/protected/application/pages/models' . PATH_SEPARATOR
