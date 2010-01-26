@@ -1,7 +1,3 @@
-# Current State #
-
-master is currently "working" with some new code for unified http requests. AFAIK it doesn't affect normal operations right now. Consider an earlier commit?
-
 # What is Storytlr? #
 
 <blockquote>Storytlr is an open source lifestreaming and micro blogging platform. You can use it for a single user or it can act as a host for many people all from the same installation.</blockquote>

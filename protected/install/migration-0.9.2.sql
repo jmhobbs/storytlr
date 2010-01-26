@@ -50,6 +50,3 @@ CREATE TABLE `goodreads_data` (
 SET character_set_client = @saved_cs_client;
 
 ALTER TABLE `data` ADD COLUMN `is_unwanted` TINYINT(1)  NOT NULL DEFAULT 0 AFTER `timestamp`;
-
-ALTER TABLE `sources` ADD COLUMN `last_modified` varchar(35) NOT NULL default 'Thu, 15 Apr 2004 12:00:00 GMT';
-ALTER TABLE `sources` ADD COLUMN `last_etag` varchar(25) NOT NULL default '';
