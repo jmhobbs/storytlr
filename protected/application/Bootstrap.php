@@ -1,6 +1,7 @@
 <?php
 /*
- *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2010 John Hobbs
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -13,7 +14,7 @@
  *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
- *  
+ *
  */
 
 // Zend includes
@@ -85,6 +86,7 @@ class Bootstrap
 
 	public static function prepare()
 	{
+		self::checkEnvironment();
 		self::setupEnvironment();
 		Zend_Loader::registerAutoload();
 		self::setupRegistry();
@@ -99,6 +101,15 @@ class Bootstrap
 		self::setupPlugins();
 		self::setupApplication();
 		self::setupAcl();
+	}
+
+	/**
+	 * Runs some basic checks to confirm that the environment contains everything
+	 * needed to run Storytlr. This is to prevent the "white screen of death" ;-)
+	 */
+	public static function checkEnvironment() {
+		if( ! function_exists( 'mcrypt_module_open' ) ) { die( 'Storytlr requires mcrypt, which can not be found.' ); }
+		if( ! class_exists( 'PDO', false ) ) { die( 'Storytlr requires PDO, which can not be found.' ); }
 	}
 
 	public static function setupEnvironment()
@@ -147,10 +158,10 @@ class Bootstrap
 		self::$frontController->setControllerDirectory(array(
 			"public" 	=> self::$root . '/application/public/controllers',
 			"console" 	=> self::$root . '/application/console/controllers',
-			"pages" 	=> self::$root . '/application/pages/controllers',		
-			"widgets" 	=> self::$root . '/application/widgets/controllers',		
+			"pages" 	=> self::$root . '/application/pages/controllers',
+			"widgets" 	=> self::$root . '/application/widgets/controllers',
 			"dialogs" 	=> self::$root . '/application/dialogs/controllers',
-			"admin"	  	=> self::$root . '/application/admin/controllers'));		
+			"admin"	  	=> self::$root . '/application/admin/controllers'));
 		self::$frontController->setDefaultModule('public');
 		self::$frontController->setParam('registry', self::$registry);
 	}
@@ -245,15 +256,15 @@ class Bootstrap
 		$router->addRoute(
 		'embed',
 		new Zend_Controller_Router_Route_Regex(
-								'embed/(.+)\.js', 
+								'embed/(.+)\.js',
 		array('module' => 'public', 'controller' => 'embed', 'action' => 'index'),
 		array(1 => 'file'),
-    							'embed/%s.js'));		
+    							'embed/%s.js'));
 
 		$router->addRoute(
 		'slug',
 		new Zend_Controller_Router_Route_Regex(
-								'entry/(.*?)(\d+)-(\d+)\.html', 
+								'entry/(.*?)(\d+)-(\d+)\.html',
 		array('module' => 'public', 'controller' => 'timeline', 'action' => 'view'),
 		array(2 => 'source', 3 => 'item'),
     							'entry/%s%d-%d.html'));
@@ -332,15 +343,15 @@ class Bootstrap
 		'surl',
 		new Zend_Controller_Router_Route('/surl/:hash', array('module' => 'public', 'controller' => 'shorturl', 'action' => 'index'))
 		);
-			
+
 		$router->addRoute(
 		'story',
 		new Zend_Controller_Router_Route_Regex(
-								'story/(\d+)-(.+)\.html', 
+								'story/(\d+)-(.+)\.html',
 		array('module' => 'public', 'controller' => 'story', 'action' => 'view'),
 		array(1 => 'id', 2 => 'description'),
     							'story/%d-%s.html'));
-			
+
 		$router->addRoute(
 		'oldrss',
 		new Zend_Controller_Router_Route('/user/:user/rss', array('module' => 'public', 'controller' => 'timeline', 'action' => 'rss'))
@@ -523,7 +534,7 @@ class Bootstrap
 
 		/* Add the root resource */
 		$acl->add(new Zend_Acl_Resource('root'));
-			
+
 		/* Resources for public module */
 		$acl->add(new Zend_Acl_Resource('public'), 			'root');
 		$acl->add(new Zend_Acl_Resource('public:comments'), 'public');
