@@ -286,6 +286,21 @@ class TwitterModel extends SourceModel {
 		return $result;
 	}
 
+	public function reparse () {
+		$picfix = $this->fetchAll( '`photo_service` IS NULL' );
+		$count = 0;
+		foreach( $picfix as $tweet ) {
+			try {
+				$ps = $this->getPhoto( $tweet->text );
+				if( false !== $ps ) {
+					$this->updateItem( $tweet->id, array( 'photo_service' => $ps['service'], 'photo_key' => $ps['key'] ) );
+					$count++;
+				}
+			} catch ( Exception $e ) {} // Shhh!
+		}
+		return $count;
+	}
+
 	private function getPhoto($status) {
 		$matches = array();
 

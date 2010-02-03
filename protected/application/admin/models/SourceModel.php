@@ -1,6 +1,7 @@
 <?php
 /*
- *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2010 John Hobbs
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -281,6 +282,10 @@ abstract class SourceModel extends Stuffpress_Db_Table
 				$this->updateTwitter($s);
 			}
 		}
+	}
+	
+	public function reparse () {
+		return 0;
 	}
 	
 	protected function updateTwitter($items) {
