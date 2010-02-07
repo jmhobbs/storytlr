@@ -479,17 +479,16 @@ class Admin_PostController extends Admin_BaseController
 			$data_table->setLocation($source_id, $item_id, $latitude, $longitude, 0);
 		}
 
-		// Send notification if twitter post is enabled
-		if ($this->_properties->getProperty('twitter_auth') && $values['twitter_notify']) {
-			$this->notifyTwitter($item);
-		}
-
 		// Ping blog search engines
 		$this->ping();
 
 		// Redirect to the timeline
 		$data   = new Data();
 		$item   = $data->getItem($source_id, $item_id);
+		// Send notification if twitter post is enabled
+		if ($this->_properties->getProperty('twitter_auth') && $values['twitter_notify']) {
+			$this->notifyTwitter($item);
+		}
 		$username	= $this->_application->user->username;
 		$url	= $this->getUrl($username, "/entry/" . $item->getSlug());
 
@@ -980,7 +979,7 @@ class Admin_PostController extends Admin_BaseController
 		$has_preamble   = $this->_properties->getProperty('preamble', true);
 
 		// Get item
-		$item		= $data->getItem($source_id, $item_id);
+		//$item		= $data->getItem($source_id, $item_id);
 		$preamble	= $has_preamble ? $item->getPreamble() : "";
 		$title		= $preamble . $item->getTitle();
 
