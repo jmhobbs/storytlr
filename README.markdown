@@ -43,6 +43,15 @@ This fork is a working copy that  includes several patches not present in 0.9.2.
 3. Check your /protected/config/config.ini
 4. Enjoy
 
+# Tracking This Fork #
+
+Once you have switched to this fork it will update quickly. There are a migration SQL files in /protected/install/migration-*.sql that should always be safe to apply to your database, they only alter or create as needed.
+
+So, the update steps are:
+
+1. Run <tt>git pull origin master</tt>
+2. Import the latest migration SQL file (or all of them to be safe)
+
 # Help! #
 
 To get help for _this specific_ fork, you can contact me on twitter @jmhobbs

@@ -1,7 +1,6 @@
-DROP TABLE IF EXISTS `github_data`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `github_data` (
+CREATE TABLE IF NOT EXISTS `github_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `source_id` int(10) unsigned NOT NULL,
   `github_id` varchar(255) NOT NULL,
@@ -15,10 +14,11 @@ CREATE TABLE `github_data` (
   FULLTEXT KEY `SEARCH` (`content`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-SET character_set_client = @saved_cs_client;DROP TABLE IF EXISTS `foursquare_data`;
+SET character_set_client = @saved_cs_client;
+
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `foursquare_data` (
+CREATE TABLE IF NOT EXISTS `foursquare_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `source_id` int(10) unsigned NOT NULL,
   `guid` varchar(255) NOT NULL,
@@ -32,10 +32,9 @@ CREATE TABLE `foursquare_data` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
-DROP TABLE IF EXISTS `goodreads_data`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `goodreads_data` (
+CREATE TABLE IF NOT EXISTS `goodreads_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `source_id` int(10) unsigned NOT NULL,
   `guid` varchar(255) NOT NULL,
@@ -51,10 +50,9 @@ SET character_set_client = @saved_cs_client;
 
 ALTER TABLE `data` ADD COLUMN `is_unwanted` TINYINT(1)  NOT NULL DEFAULT 0 AFTER `timestamp`;
 
-DROP TABLE IF EXISTS `stackoverflow_data`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `stackoverflow_data` (
+CREATE TABLE IF NOT EXISTS `stackoverflow_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `source_id` int(10) unsigned NOT NULL,
   `stackoverflow_id` varchar(255) NOT NULL,
@@ -68,10 +66,9 @@ CREATE TABLE `stackoverflow_data` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
-DROP TABLE IF EXISTS `googlebuzz_data`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `googlebuzz_data` (
+CREATE TABLE IF NOT EXISTS `googlebuzz_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `source_id` int(10) unsigned NOT NULL,
   `buzz_id` varchar(255) NOT NULL,
@@ -85,10 +82,9 @@ CREATE TABLE `googlebuzz_data` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
-DROP TABLE IF EXISTS `twitterfavorites_data`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `twitterfavorites_data` (
+CREATE TABLE IF NOT EXISTS `twitterfavorites_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `source_id` int(10) unsigned NOT NULL,
   `tweet_id` varchar(255) NOT NULL,
