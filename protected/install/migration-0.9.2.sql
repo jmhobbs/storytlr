@@ -48,7 +48,22 @@ CREATE TABLE IF NOT EXISTS `goodreads_data` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 SET character_set_client = @saved_cs_client;
 
-ALTER TABLE `data` ADD COLUMN `is_unwanted` TINYINT(1)  NOT NULL DEFAULT 0 AFTER `timestamp`;
+
+delimiter '//'
+CREATE PROCEDURE add_data_column() BEGIN
+IF NOT EXISTS(
+	SELECT * FROM information_schema.COLUMNS
+	WHERE COLUMN_NAME='is_unwanted' AND TABLE_NAME='data'
+	)
+	THEN
+		ALTER TABLE `data` ADD COLUMN `is_unwanted` TINYINT(1)  NOT NULL DEFAULT 0 AFTER `timestamp`;
+END IF;
+END;
+//
+delimiter ';'
+CALL add_data_column();
+DROP PROCEDURE add_data_column;
+
 
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
