@@ -8,16 +8,24 @@ And...
 
 # More information #
 
-You can find more information about Storytlr online at [http://storytlr.googlecode.com/](http://storytlr.googlecode.com/)
+You can find more information about Storytlr online at <http://storytlr.googlecode.com/>
 
 # What else is in this fork? #
 
 This fork is a working copy that  includes several patches not present in 0.9.2.  Eventually most of these changes will find their way into core.
 
 * A tool to rename users (dangerous if not handled properly)
-* Plugins built in for: github, goodreads, foursquare
+* Plugins built in for...
+  * [Github](http://github.com/)
+  * [goodreads](http://goodreads.com/)
+  * [Foursquare](http://www.foursquare.com/)
+  * [Stack Overflow](http://www.stackoverflow.com/)
+  * [Twitter favorites](http://www.twitter.com/)
+  * [Google Buzz](http://buzz.google.com/)
 * Ability to delete items that are from other sources (not just ones from Storytlr itself)
-* tidy is replaced by htmLawed
+* tidy is replaced by [htmLawed](http://code.google.com/p/htmlawed/)
+* Misc fixes for issues reported on the Google group
+* Misc fixes from other forks, esp. paths courtesy of [Stuart Herbert](http://github.com/stuartherbert)
 
 # Installation #
 
@@ -38,3 +46,5 @@ This fork is a working copy that  includes several patches not present in 0.9.2.
 # Help! #
 
 To get help for _this specific_ fork, you can contact me on twitter @jmhobbs
+
+For general Storytlr help you can try the Storytlr community at <http://storytlr.googlecode.com/> or in #storytlr on [freenode](http://freenode.net/).
