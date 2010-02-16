@@ -1,2 +1,9 @@
-protected/config/config.ini
-protected/logs/*.log
+.buildpath
+.project
+.settings
+config.ini
+*.log
+protected/library/Zend
+protected/upload/**
+protected/temp/**
+protected/logs/**

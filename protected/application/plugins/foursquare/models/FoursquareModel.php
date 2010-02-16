@@ -113,7 +113,7 @@ class FoursquareModel extends SourceModel {
 			}
 			catch ( Stuffpress_Exception $e ) {}
 
-			$id = $this->addItem( $data, $data['published'], SourceItem::LINK_TYPE, false, $location, false, $data['title'] );
+			$id = $this->addItem( $data, $data['published'], SourceItem::STATUS_TYPE, false, $location, false, $data['title'] );
 			if ($id) $result[] = $id;
 		}
 		return $result;
