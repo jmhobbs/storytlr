@@ -1,5 +1,24 @@
+<?php
+	// Not entirely comfortable with this, but it works.
+	$style = "";
+	$matches = array();
+	if( preg_match( '/width="([0-9]+)"/', $this->item->getEmbed(), $matches ) ) {
+		$width = intval( $matches[1] );
+		if( preg_match( '/height="([0-9]+)"/', $this->item->getEmbed(), $matches ) ) {
+			$height = intval( $matches[1] );
+			if( $height <= 480 && $width <= 640 ) {
+				$style  = ' style="';
+				$style .= "width: {$width}px; height: {$height}px; position: relative; ";
+				$style .= "left: " . floor( ( 640 - $width ) /  2 ) . "px; top: " . floor( ( 480 - $height ) / 2 ) . "px;";
+				$style .= '"';
+			}
+		}
+	}
+?>
 <div class="bliptv">
 	<div class="video">
+		<div<?= $style; ?>>
 		<?= $this->item->getEmbed(); ?>
+		</div>
 	</div>
 </div>
