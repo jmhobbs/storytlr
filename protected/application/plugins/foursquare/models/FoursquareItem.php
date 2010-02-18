@@ -28,9 +28,6 @@ class FoursquareItem extends SourceItem {
 
 	public function getLink() { return $this->_data['link']; }
 
-<<<<<<< HEAD
-	public function getType() { return SourceItem::LINK_TYPE; }
-=======
 	public function getType() { return SourceItem::STATUS_TYPE; }
 	
 	public function getStatus() { 
@@ -51,7 +48,6 @@ class FoursquareItem extends SourceItem {
 
  		return;
 	}
->>>>>>> c8ad18bbdd38aca3cb36149139acec3c339724f2
 
 	public function getBackup() {
 		$item = array();
