@@ -175,7 +175,7 @@ abstract class SourceModel extends Stuffpress_Db_Table
 		foreach($data as $k => $v) {
 			unset($data[$k]);
 			if (!$v) continue;
-			$columns[] = "$k";
+			$columns[] = "`$k`";
 			$keys[] = ":$k";
 			$data[":$k"] = "$v";
 		}
