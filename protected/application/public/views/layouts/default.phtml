@@ -217,7 +217,7 @@
 		
 			<?php if ($this->tab >= $this->theme_data['tabs']) : ?>
 				<div id="breadcrumb">
-					<em><?= $this->page_title ?></em>
+					<em><?= htmlspecialchars( $this->page_title ) ?></em>
 				</div>
 			<?php endif ?>
 		

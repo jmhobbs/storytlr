@@ -1,11 +1,11 @@
 <?php if ($this->archive) : ?>
 	<div id="breadcrumb">
-		Lifestream archive for <?= $this->month ?> <?= $this->year ?>
+		Lifestream archive for <?= htmlspecialchars( $this->month ) ?> <?= htmlspecialchars( $this->year ) ?>
 	</div>
 	<br/>
 <?php elseif ($this->search) : ?>
 	<div id="breadcrumb">
-		Search results for <em><?= $this->search ?></em>
+		Search results for <em><?= htmlspecialchars( $this->search ) ?></em>
 	</div>
 	<br/>
 <?php elseif ($this->selection) : ?>
@@ -19,9 +19,9 @@
 	<?php if ($this->archive) : ?>
 	<?= ucfirst($this->username); ?> did not post any data on these dates.
 	<?php elseif ($this->search) : ?>
-	Did not find any match for the search <em><?= $this->search?></em>.
+	Did not find any match for the search <em><?= htmlspecialchars( $this->search )?></em>.
 	<?php else : ?>
-	We are sorry, <?= $this->username?> has not yet any data to display on his lifestream.
+	We are sorry, <?= $this->username ?> has not yet any data to display on his lifestream.
 	<?php endif ?>
 <?php else :
 $date  = "";
