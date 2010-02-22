@@ -1,0 +1,9 @@
+<div class="scribd">
+	<?php if( $this->item->getContent() ) : ?>
+		<?php if( $this->model->getProperty( 'hide_content' ) ) : ?><img  class='toggle_button' src='images/button_show.png' title="Show post" onClick="toggle_button(this, 'scribd_<?= $this->item->getId(); ?>', 'Hide post', 'Show post');" /><?php endif ?>
+	<?php endif ?>
+	<div class="title"><a href="<?= $this->item->getLink() ?>" target="_blank"><?= $this->item->getTitle() ?></a></div>
+	<?php if( $this->item->getContent() ) : ?>
+		<div id="scribd_<?= $this->item->getId(); ?>" <?php if( $this->model->getProperty( 'hide_content' ) ) { echo "style='display: none;'"; } ?> class="content"><?= $this->item->getContent(); ?></div>
+	<?php endif; ?>
+</div>
