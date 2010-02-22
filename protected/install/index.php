@@ -115,7 +115,7 @@
 		</style>
 	</head>
 	<body>
-		<!--//<h1>Storytlr Installation</h1>//-->
+		<h1>Storytlr Installation</h1>
 		<p>
 			<a href="http://storytlr.googlecode.com/">http://storytlr.googlecode.com/</a>
 		</p>
@@ -149,15 +149,16 @@
 			<label for="mysql_password">Password:</label> <input type="password" id="mysql_password" name="mysql_password" /><br/>
 		</fieldset>
 		<fieldset>
-			<legend>Installation Type</legend>
-			<label for="single_user">Single User:</label> <input type="radio" name="users" checked="checked" value="single" id="single_user" /><br/>
-			<label for="multi_user">Multiple User:</label> <input type="radio" name="users" value="multi" id="multi_user" /><br/><br/>
+			<legend>User</legend>
+			<label for="config_adminusername">Username:</label> <input type="text" id="config_adminusername" name="config_adminusername" /><br/>
+			<label for="config_adminpassword">Password:</label> <input type="password" id="config_adminpassword" name="config_adminpassword" /><br/>
 		</fieldset>
 		<fieldset>
-			<legend>Admin User</legend>
-			<label for="config_adminusername">Admin Username:</label> <input type="text" id="config_adminusername" name="config_adminusername" /><br/>
-			<label for="config_adminpassword">Admin Password:</label> <input type="password" id="config_adminpassword" name="config_adminpassword" /><br/>
+			<legend>API Keys</legend>
+			<label for="google_maps">Google Maps API Key:</label> <input type="text" id="google_maps" name="google_maps" /><br/>
+			<label for="flickr_maps">Flickr API Key:</label> <input type="text" id="flickr_maps" name="flickr_maps" /><br/>
 		</fieldset>
+		<input type="submit" value="Install" />
 	</form>
 <?
 	else:
