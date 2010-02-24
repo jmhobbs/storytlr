@@ -22,6 +22,13 @@
 			good( "PHP Version " . phpversion() . " meets requirement." );
 	}
 
+	function check_setting ( $setting, $expected ) {
+		if( $expected != ini_get( $setting ) )
+			bad( "PHP Setting '$setting' should be '". var_export( $expected, true ) . "'." );
+		else
+			good( "PHP Setting '$setting' is '" . var_export( $expected, true ) ."'." );
+	}
+
 	// Check if a class exists
 	function check_class ( $class, $name, $warn_only=false ) {
 		if( class_exists( $class, false ) )
@@ -122,6 +129,7 @@
 		<h2>Check Requirements</h2>
 <?php
 	check_php( "5.0" );
+	check_setting( "magic_quotes_gpc", false );
 
 	if( check_include( 'Zend/Version.php', 'Zend Framework' ) )
 		if( Zend_Version::compareVersion( '1.0.0' ) > 0 )

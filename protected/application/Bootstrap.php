@@ -111,6 +111,7 @@ class Bootstrap
 		if( ! function_exists( 'mcrypt_module_open' ) ) { die( 'Storytlr requires mcrypt, which can not be found.' ); }
 		if( ! class_exists( 'PDO', false ) ) { die( 'Storytlr requires PDO, which can not be found.' ); }
 		if( ! function_exists( 'curl_init' ) ) { die( 'Storytlr requires PHP Curl, which can not be found.' ); }
+		if( get_magic_quotes_gpc() ) { die( 'Storytlr requires that the PHP setting "magic_quotes_gpc" be false.' . "<br/>\nhttp://php.net/manual/en/info.configuration.php#ini.magic-quotes-gpc" ); }
 	}
 
 	public static function setupEnvironment()
