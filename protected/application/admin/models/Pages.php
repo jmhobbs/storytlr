@@ -1,6 +1,7 @@
 <?php
 /*
- *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2010 John Hobbs
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@ class Pages extends Stuffpress_Db_Table
 	protected $_primary = 'id';
 
 	public static function getAvailablePages() {
-		return array('dashboard', 'lifestream', 'stories', 'pictures', 'videos', 'map', 'custom', 'link'); 
+		return array('dashboard', 'lifestream', 'stories', 'pictures', 'videos', 'map', 'custom', 'link', 'infographic'); 
 	}
 	
 	public static function getSchemas() {

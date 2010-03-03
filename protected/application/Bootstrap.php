@@ -625,6 +625,7 @@ class Bootstrap
 		$acl->add(new Zend_Acl_Resource('pages:stories'),    'pages');
 		$acl->add(new Zend_Acl_Resource('pages:videos'),     'pages');
 		$acl->add(new Zend_Acl_Resource('pages:map'),     	'pages');
+		$acl->add(new Zend_Acl_Resource('pages:infographic'), 'pages');
 
 		/* Resources for dialogs */
 		$acl->add(new Zend_Acl_Resource('dialogs'), 		  'root');
@@ -664,6 +665,7 @@ class Bootstrap
 		$acl->allow('guest',  'pages:stories',	 array('index'));
 		$acl->allow('guest',  'pages:videos',	 array('index'));
 		$acl->allow('guest',  'pages:map',	 	 array('index'));
+		$acl->allow('guest',  'pages:infographic', 	 array('index'));
 
 
 		$acl->allow('guest',  'widgets:archives',     array('index'));
