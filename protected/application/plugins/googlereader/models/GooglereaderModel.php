@@ -59,12 +59,13 @@ class GooglereaderModel extends SourceModel {
 			$items = Zend_Feed::import($url);
 			$feed_url = $url;
 		} else {
-			$items = $feeds[0];
-			$feed_url = Zend_Feed::getHttpClient()->getUri(true);
+			$feeds_uri = array_keys($feeds);
+			$feed_url = $feeds_uri[0];
+			$items = $feeds[$feed_url];
 		}
 
 		$this->setProperty('feed_url', $feed_url);
-		$items = $this->processItems($items, 'published');
+		$items = $this->processItems($items);
 		$this->setImported(true);
 		return $items;
 	}
@@ -84,7 +85,7 @@ class GooglereaderModel extends SourceModel {
 		return $result;
 	}
 
-	private function processItems($items, $time) {
+	private function processItems($items) {
 		$result = array();
 
 		foreach ($items as $item) {
