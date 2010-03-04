@@ -4,12 +4,6 @@ define("STORYTLR_VERSION","0.9.3.jmhobbs.dev");
 // Update after deployment for location of non-public files
 $root = dirname(__FILE__);
 
-// Run the install stuff if it is there.
-if( file_exists( $root . '/protected/install/index.php' ) ) {
-	require_once( $root . '/protected/install/index.php' );
-	exit();
-}
-
 // We're assuming the Zend Framework is already on the include_path
 // TODO this should be moved to the boostrap file
 set_include_path(
