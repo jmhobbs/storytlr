@@ -135,28 +135,51 @@ class Pages_InfographicController extends Pages_BaseController {
 						$e = $s + 3599;
 						$intervals[] = array( strval( $i ), $s, $e );
 					}
-					$this->view->total_by_interval = "Total Posts Per Previous Hour";
+					$this->view->total_by_interval = "Total Posts By Source Per Previous Hour";
 					break;
 			}
 			
-			$data = array();
+			$series = array();
 			$labels = array();
 			foreach( $intervals as $interval ) {
-				$data[] = 0;
 				$labels[] = $interval[0];
 			}
 			foreach( $this->view->items as $item ) {
+				$source = SourceModel::getSourceModel( $item->getSource() )->getTitle();
+				
+				// Initialize the series if it doesn't exist
+				if( ! isset( $series[$source] ) ) {
+					$series[$source] = array();
+					foreach( $intervals as $interval )
+						$series[$source][] = 0;
+				}
+			
 				foreach( $intervals as $key => $interval ) {
 					if( $item->getTimestamp() >= $interval[1] && $item->getTimestamp() < $interval[2] ) {
-						++$data[$key]; 
+						++$series[$source][$key];
+						break;
 					}
 				}
+				
 			}
-			$max = 5;
-			foreach( $data as $datum )
-				if( $datum > $max )
-					$max = $datum;
-			$this->view->total_by_interval_url = "http://chart.apis.google.com/chart?cht=lc&chd=t:" . implode( ',', $data ) . "&chs=500x200&chl=" . implode( '|', $labels ) . "&chds=0," . ( $max + floor( $max / 5 ) ) . "&chxt=y&chxr=0,0," . ( $max + floor( $max / 5 ) ) . "," . floor( $max / 5 ) . "&chco=" . $this->colors[0];
+			
+			// Determine maximum y-range bound
+			$max = 1;
+			foreach( $series as $serie ) {
+				foreach( $serie as $datum ) {
+					if( $datum > $max )
+						$max = $datum;
+				}
+			}
+
+			$data = array();
+			$legend = array();
+			foreach( $series as $name => $serie ) {
+				$data[] = implode( ',', $serie );
+				$legend[] = $name;
+			}
+
+			$this->view->total_by_interval_url = "http://chart.apis.google.com/chart?cht=lc&chd=t:" . implode( '|', $data ) . "&chs=500x200&chl=" . implode( '|', $labels ) . "&chds=0," . ( $max + floor( $max / 5 ) ) . "&chxt=y&chxr=0,0," . ( $max + floor( $max / 5 ) ) . "," . ceil( $max / 5 ) . "&chco=" . implode( ',', $this->colors ) . '&chdl=' . implode( '|', $legend );
 
 		}
 		
