@@ -51,9 +51,9 @@ class Pages_InfographicController extends Pages_BaseController {
 		// To do before anything else
 		$this->initPage();
 		
-		$interval = $this->getRequest()->getParam( "from" );
+		$from = $this->getRequest()->getParam( "from" );
 
-		switch( trim( strtolower( $interval ) ) ) {
+		switch( trim( strtolower( $from ) ) ) {
 			default:
 			case 'twentyfour':
 				$start = time() - 24 * 60 * 60;
@@ -127,7 +127,7 @@ class Pages_InfographicController extends Pages_BaseController {
 
 			///// Source Over Interval /////
 			$intervals = array();
-			switch( trim( strtolower( $interval ) ) ) {
+			switch( trim( strtolower( $from ) ) ) {
 				default:
 				case 'twentyfour':
 					for( $i = 24; $i > 0; --$i ) {
