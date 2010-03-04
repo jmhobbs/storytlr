@@ -1,74 +1,39 @@
-<?php
-	// Supplied to Google charts as the basis for our chart colors
-	$colors = array(
-		"3366FF",
-		"6633FF",
-		"CC33FF",
-		"FF33CC",
-		"33CCFF",
-		"003DF5",
-		"002EB8",
-		"FF3366",
-		"33FFCC",
-		"B88A00",
-		"F5B800",
-		"FF6633",
-		"33FF66",
-		"66FF33",
-		"CCFF33",
-		"FFCC33"
-	);
-?>
-
-<h1>In the last <?php echo $this->interval; ?>...</h1>
+<h2>In the last <?php echo $this->interval_name; ?>...</h2>
 <?php if( false === $this->items ): ?>
-	I have done nothing. Please check my pulse.
+	<p>I have done nothing. Please check my pulse.</p>
 <?php else: ?>
-	<h2>I've posted <?php echo $this->total; ?> bits of text, links, videos and photos.</h2>
+	<p>I've posted <?php echo $this->total; ?> bits of text, links, videos and photos.</p>
 	
-	<h2>The most recent was from <?php echo $this->latest_ago; ?> ago, it was from <?php echo $this->latest_source; ?></h2>
+	<p>The most recent was from <?php echo $this->latest_ago; ?> ago, it was from <?php echo $this->latest_source; ?></p>
 	
 	<div id="latest-item" style="background: #DFDFDF; padding: 5px;">
-	<?php
-		echo $this->partial(
-			'timeline/item.phtml',
-			'public',
-			array(
-				'item' => $this->items[0],
-				'admin' => $this->admin,
-				'model' => $this->models[ $this->items[0]->getSource() ],
-				'disqus' => $this->disqus,
-				'googlefc' => $this->googlefc
-			)
-		); 
-	?>
+		<?php
+			echo $this->partial(
+				'timeline/item.phtml',
+				'public',
+				array(
+					'item' => $this->latest,
+					'admin' => $this->admin,
+					'model' => $this->models[ $this->latest->getSource() ],
+					'disqus' => $this->disqus,
+					'googlefc' => $this->googlefc
+				)
+			); 
+		?>
 	</div>
 	
 	<h2>Posts By Type</h2>
 	<div class="thing-ive-done" style="text-align: center;">
-	<?php
-		$data = array();
-		$labels = array();
-		foreach( $this->type_distribution as $type => $count ) {
-			$data[] = round( $count / $this->total * 100 );
-			$labels[] = ucwords( $type );
-		}
-		$url = "http://chart.apis.google.com/chart?cht=p3&chd=t:" . implode( ',', $data ) . "&chs=500x200&chl=" . implode( '|', $labels ) . '&chco=' . implode( '|', $colors );
-		print '<img src="' . $url . '" />';
-	?>
+		<?php print '<img src="' . $this->type_distribution_url . '" alt="Loading..." />'; ?>
 	</div>
 	
 	<h2>Posts By Source</h2>
 	<div class="thing-ive-done" style="text-align: center;">
-	<?php
-		$data = array();
-		$labels = array();
-		foreach( $this->source_distribution as $type => $count ) {
-			$data[] = round( $count / $this->total * 100 );
-			$labels[] = ucwords( $type );
-		}
-		$url = "http://chart.apis.google.com/chart?cht=p3&chd=t:" . implode( ',', $data ) . "&chs=500x200&chl=" . implode( '|', $labels ) . '&chco=' . implode( '|', $colors );
-		print '<img src="' . $url . '" />';
-	?>
+		<?php print '<img src="' . $this->source_distribution_url . '" alt="Loading..." />'; ?>
+	</div>
+	
+	<h2><?php echo $this->total_by_interval; ?></h2>
+	<div class="thing-ive-done" style="text-align: center;">
+		<?php print '<img src="' . $this->total_by_interval_url . '" alt="Loading..." />'; ?>
 	</div>
 <?php endif; ?>
