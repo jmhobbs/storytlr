@@ -64,9 +64,9 @@ class Pages_InfographicController extends Pages_BaseController {
 				$start = strtotime( date( "Y-m-d 00:00:00", time() - 7 * 24 * 60 * 60 ) );
 				$this->view->interval_name = "Week";
 				break;
-			case 'thirty':
-				$start = time() - 30 * 24 * 60 * 60;
-				$this->view->interval_name = "30 Days";
+			case 'month':
+				$start = time() - 28 * 24 * 60 * 60;
+				$this->view->interval_name = "4 Weeks";
 				break;
 			case 'year':
 				$start = time() - 365 * 24 * 60 * 60;
@@ -136,6 +136,33 @@ class Pages_InfographicController extends Pages_BaseController {
 						$intervals[] = array( strval( $i ), $s, $e );
 					}
 					$this->view->total_by_interval = "Total Posts By Source Per Previous Hour";
+					break;
+				case 'week':
+					// Not "precise", but it looks good :-)
+					for( $i = 7; $i > 0; --$i ) {
+						$s = $start + ( ( 8 - $i ) * 86400 );
+						$e = $s + 86399;
+						$intervals[] = array( date( 'D', $e ), $s, $e );
+					}
+					$this->view->total_by_interval = "Total Posts By Source Per Previous Day";
+					break;
+				case 'month':
+					// Not "precise", but it looks good :-)
+					for( $i = 4; $i > 0; --$i ) {
+						$s = $start + ( ( 4 - $i ) * 604800 );
+						$e = $s + 604799;
+						$intervals[] = array( strval( $i ), $s, $e );
+					}
+					$this->view->total_by_interval = "Total Posts By Source Per Previous Week";
+					break;
+				case 'year':
+					// Not "precise", but it looks good :-)
+					for( $i = 12; $i > 0; --$i ) {
+						$s = $start + ( ( 12 - $i ) * 2419200 );
+						$e = $s + 2419199;
+						$intervals[] = array( date( 'M', floor( ( $s + $e ) / 2 ) ), $s, $e );
+					}
+					$this->view->total_by_interval = "Total Posts By Source Per Month";
 					break;
 			}
 			
