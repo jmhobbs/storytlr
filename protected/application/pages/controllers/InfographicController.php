@@ -164,6 +164,12 @@ class Pages_InfographicController extends Pages_BaseController {
 					}
 					$this->view->total_by_interval = "Total Posts By Source Per Month";
 					break;
+				case 'all':
+					$oldest = $this->view->items[count($this->view->items)-1]->getTimestamp();
+					$intervals[] = array ( date( 'M Y', $oldest ), 0, $oldest - 1 );
+					$intervals[] = array ( 'Now', $oldest, time() );
+					$this->view->total_by_interval = "Total Posts By Source";
+					break;
 			}
 			
 			$series = array();
