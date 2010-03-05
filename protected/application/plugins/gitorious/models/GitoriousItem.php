@@ -23,13 +23,20 @@ class GitoriousItem extends SourceItem {
 
 	protected $_preamble = 'Gitorious activity: ';
 
-	public function getContent() { return $this->_data['content']; } // Needs love
+	public function getContent() {
+		//! \todo The links still need love.
+		$content = $this->_data['content'];
+		$pars = explode( '</p>', $content );
+		if( 2 <= count( $pars ) && '' != trim( str_replace( '<p>', '', $pars[1] ) ) )
+			$content = $pars[0] . '</p>' . '<div class="message note"><blockquote>' . implode( '</p>', array_slice( $pars, 1 ) ) . '</blockquote></div>';
+		return preg_replace( '/href="(.*?)"/', 'href="http://gitorious.org\1"', $content );
+	}
 
 	public function getTitle () { return $this->_data['title']; }
 
 	public function getLink() { return $this->_data['link']; }
 
-	public function getType() { return SourceItem::LINK_TYPE; }
+	public function getType() { return SourceItem::STATUS_TYPE; }
 
 	public function getBackup() {
 		$item = array();
