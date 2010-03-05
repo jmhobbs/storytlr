@@ -216,8 +216,8 @@ class Pages_InfographicController extends Pages_BaseController {
 
 		}
 		
-		// Prepare the common elements
 		$this->common();
+		$this->view->headScript()->appendFile('js/controllers/timeline.js');
 	}
 
 	protected function ago ( $timestamp ) {
