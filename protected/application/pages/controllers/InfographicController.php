@@ -52,6 +52,7 @@ class Pages_InfographicController extends Pages_BaseController {
 		$this->initPage();
 		
 		$from = $this->getRequest()->getParam( "from" );
+		$this->view->tab = $this->getRequest()->getParam( "tab" );
 
 		switch( trim( strtolower( $from ) ) ) {
 			default:

@@ -1,3 +1,9 @@
+<b>View:</b> <a href="<?php echo $this->base()->thisUrl(); ?>/home?tab=<?php echo $this->tab; ?>&from=twentyfour">24 Hours</a> |
+<a href="<?php echo $this->base()->thisUrl(); ?>/home?tab=<?php echo $this->tab; ?>&from=week">Week</a> |
+<a href="<?php echo $this->base()->thisUrl(); ?>/home?tab=<?php echo $this->tab; ?>&from=month">Month</a> |
+<a href="<?php echo $this->base()->thisUrl(); ?>/home?tab=<?php echo $this->tab; ?>&from=year">Year</a> |
+<a href="<?php echo $this->base()->thisUrl(); ?>/home?tab=<?php echo $this->tab; ?>&from=all">All Time</a>
+
 <h2>In the last <?php echo $this->interval_name; ?>...</h2>
 <?php if( false === $this->items ): ?>
 	<p>I have done nothing. Please check my pulse.</p>
