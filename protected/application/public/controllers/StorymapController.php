@@ -1,6 +1,7 @@
 <?php
 /*
- *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2010 John Hobbs
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -144,7 +145,7 @@ class StorymapController extends BaseController
 		date_default_timezone_set($timezone);
 
 		// User provided footer (e.g. tracker)
-		$user_footer					= $properties->getProperty('footer');
+		$user_footer					= $properties->getProperty('user_footer');
 		$this->view->user_footer 		= $user_footer;
 		
 		// Page title
@@ -157,7 +158,6 @@ class StorymapController extends BaseController
 		// Page layout
 		$this->view->title				= $properties->getProperty('title');
 		$this->view->subtitle			= $properties->getProperty('subtitle');
-		$this->view->footer				= $properties->getProperty('footer');
 		$this->view->section			= "story";
 	}
 }

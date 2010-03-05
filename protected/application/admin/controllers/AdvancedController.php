@@ -1,6 +1,7 @@
 <?php
 /*
- *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2010 John Hobbs
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@ class Admin_AdvancedController extends Admin_BaseController
     
 	public function indexAction() {		
 		// Get the required properties
-		$values 	= $this->_properties->getProperties(array(	"disqus"));
+		$values 	= $this->_properties->getProperties(array( "disqus", 'user_footer' ) );
 
 		// User CNAME setting
 		$values['cname'] = $this->_application->user->domain;
@@ -71,6 +72,7 @@ class Admin_AdvancedController extends Admin_BaseController
 		$googlefc   = $values['friendconnect'];
 		
 		// Save the new values
+		$this->_properties->setProperty( 'user_footer', $values['user_footer'] );
 		$this->_properties->setProperty('disqus', 	$disqus);
 		$this->_properties->setProperty('googlefc', $googlefc);				
 		$users->setDomain($this->_application->user->id, $cname);
@@ -110,6 +112,11 @@ class Admin_AdvancedController extends Admin_BaseController
         $e->setDescription("Add Google Friend Connect to your site and make it social");
         $form->addElement($e);
     
+		// Footer
+		$e = $form->createElement( 'textarea', 'user_footer',  array( 'rows' => 5, 'cols' => 37, 'label' => 'Footer Code', 'decorators' => $form->elementDecorators ) );
+		$e->setRequired( false );
+		$e->setDescription( "Add code to the bottom of every page. Good for analytics systems." );
+		$form->addElement( $e );
         
         // Save button
 		$e = $form->createElement('button', 'save', array('label' => 'Save', 'onclick' => "submitFormAdvanced();", 'decorators' => $form->buttonDecorators));

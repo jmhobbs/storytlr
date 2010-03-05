@@ -1,6 +1,7 @@
 <?php
 /*
- *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2010 John Hobbs
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -89,7 +90,7 @@ abstract class BaseController extends Stuffpress_Controller_Action
 		}
 
 		// User provided footer (e.g. tracker)
-		$user_footer					= $this->_properties->getProperty('footer');
+		$user_footer					= $this->_properties->getProperty('user_footer');
 		$this->view->user_footer 		= $user_footer;
 		
 		// Javascript
@@ -147,7 +148,6 @@ abstract class BaseController extends Stuffpress_Controller_Action
 		$this->view->subtitle			= $this->_properties->getProperty('subtitle');
 		$this->view->disqus				= $this->_properties->getProperty('disqus');
 		$this->view->googlefc			= $this->_properties->getProperty('googlefc');
-		$this->view->footer				= $this->_properties->getProperty('footer');
 	}
 	
 	protected function getModels() {
