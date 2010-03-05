@@ -1,13 +1,64 @@
 <?php
 	require_once( 'shared.php' );
 
-	if( file_exists( $root . 'protected/config/config.ini' ) ) {
-		bad( 'Storytlr appears to already be installed, protected/config/config.ini exists.<br/>Please remove or rename protected/install/install.php' );
+	if( file_exists( $root . '/protected/config/config.ini' ) ) {
+		Check::bad( 'Storytlr appears to already be installed, protected/config/config.ini exists.<br/>Please remove or rename protected/install/install.php' );
 		return 'Installation';
 	}
 
+	$form_errors = array();
+	$form_values = array(
+		'mysql_host' => 'localhost',
+		'mysql_database' => 'storytlr',
+		'config_username' => 'admin'
+	);
+
+	if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
+		$form_values = $_POST;
+		
+		// Validation
+		$required = array(
+			'mysql_host',
+			'mysql_database',
+			'mysql_user',
+			'mysql_password'
+		);
+		foreach( $required as $field ) {
+			if( empty( $_POST[$field] ) )
+				$form_errors[$field] = 'Field is required.';
+		}
+		
+		// Installation
+		try {
+			if( 0 == count( $form_errors ) ) {
+				$res = Database::Connect( $_POST['mysql_host'], $_POST['mysql_database'], $_POST['mysql_user'], $_POST['mysql_password'] );
+				if( true !== $res ) {
+					$form_errors['mysql_host'] = 'Please check this field.';
+					$form_errors['mysql_database'] = 'Please check this field.';
+					$form_errors['mysql_user'] = 'Please check this field.';
+					$form_errors['mysql_password'] = 'Please check this field.';
+					throw new Exception( $res );
+				}
+				Check::good( '[' . date( 'H:i:s' ) .'] Connected to database.' );
+				
+				$res = Database::RunFile( $root . '/protected/install/schema.sql' );
+				if( true !== $res )
+					throw new Exception( 'Error loading database schema:<br/><div class="nested-error">' . $res . '</div>' );
+				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database schema.' );
+				
+				return 'Installation';
+			}
+			else {
+				throw new Exception( 'Your configuration has errors, please see below.' );
+			}
+		}
+		catch ( Exception $e ) {
+			Check::bad( $e->getMessage() );
+		}
+		
+	}
 ?>
-		<h2>Requirements Check</h2>
+	<h2>Requirements Check</h2>
 <?php
 	Check::PHP( "5.0" );
 	Check::SettingValue( "magic_quotes_gpc", false );
@@ -24,28 +75,36 @@
 	Check::PathWritable( 'protected/temp/' );
 	Check::PathWritable( 'protected/upload/' );
 	Check::PathWritable( 'protected/logs/' );
+	Check::PathWritable( 'protected/install/version/' );
 	Check::PathWritable( 'protected/config/config.ini', true );
 
 	if( Check::no_errors() ):
+		$form = new Form( $form_errors, $form_values );
 ?>
 	<h2>Configuration</h2>
 	<form action="" method="POST">
 		<fieldset>
 			<legend>MySQL</legend>
-			<label for="mysql_host">Host:</label> <input type="text" id="mysql_host" name="mysql_host" /><br/>
-			<label for="mysql_database">Database Name:</label> <input type="text" id="mysql_database" name="mysql_database" /><br/>
-			<label for="mysql_user">User:</label> <input type="text" id="mysql_user" name="mysql_user" /><br/>
-			<label for="mysql_password">Password:</label> <input type="password" id="mysql_password" name="mysql_password" /><br/>
+			<?php
+				$form->text( 'mysql', 'host' );
+				$form->text( 'mysql', 'database', 'Database Name' );
+				$form->text( 'mysql', 'user' );
+				$form->password( 'mysql', 'password' );
+			?>
 		</fieldset>
 		<fieldset>
 			<legend>User</legend>
-			<label for="config_adminusername">Username:</label> <input type="text" id="config_adminusername" name="config_adminusername" /><br/>
-			<label for="config_adminpassword">Password:</label> <input type="password" id="config_adminpassword" name="config_adminpassword" /><br/>
+			<?php
+				$form->text( 'config', 'username', 'Username' );
+				$form->password( 'config', 'password', 'Password' );
+			?>
 		</fieldset>
 		<fieldset>
 			<legend>API Keys</legend>
-			<label for="google_maps">Google Maps API Key:</label> <input type="text" id="google_maps" name="google_maps" /><br/>
-			<label for="flickr_maps">Flickr API Key:</label> <input type="text" id="flickr_maps" name="flickr_maps" /><br/>
+			<?php
+				$form->text( 'config', 'google_maps_api_key' );
+				$form->text( 'config', 'flickr_api_key' );
+			?>
 		</fieldset>
 		<input type="submit" value="Install" />
 	</form>

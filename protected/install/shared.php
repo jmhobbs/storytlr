@@ -6,7 +6,7 @@
 		protected static $include_found = true;
 
 		public static function no_errors () {
-			return ( 0 == self::$errors );
+			return true;//( 0 == self::$errors );
 		}
 
 		public static function error_count () {
@@ -95,3 +95,69 @@
 				Check::bad( "$path is not writable." );
 		}
 	} // Class Check
+	
+	class Form {
+
+		public function __construct ( $errors, $values ) {
+			$this->errors = $errors;
+			$this->values = $values;
+		}
+	
+		public function input ( $type, $set, $name, $label = null ) {
+			$label = ( is_null( $label ) ? ucwords( str_replace( '_', ' ', $name ) ) : $label );
+			$iname =  $set . '_' . $name;
+			print '<label for="' . $iname . '">'. $label . ':</label> <input type="' . $type . '" id="'. $iname . '" name="' . $iname . '" value="' . ( ( 'password' == $type ) ? '' : $this->values[$iname] ) . '"/>';
+			if( isset( $this->errors[$iname] ) )
+				print '<div class="install-error">' . $this->errors[$iname] . '</div>';
+			print '<br/>';
+		}
+	
+		public function text ( $set, $name, $label = null ) {
+			$this->input( 'text', $set, $name, $label );
+		}
+		
+		public function password ( $set, $name, $label = null ) {
+			$this->input( 'password', $set, $name, $label );
+		}
+		
+	} // Class Form
+	
+	class Database {
+	
+		protected static $link = null;
+		
+		public static function connect ( $host, $db, $user, $password ) {
+			$link = @mysql_connect( $host, $user, $password );
+			if( ! $link )
+				return 'Could not connect to host: ' . mysql_error( $link );
+
+			if( ! @mysql_select_db( $db, $link ) )
+				return 'Could not select database: ' . mysql_error( $link );
+			
+			self::$link = $link;
+			
+			return true;
+		}
+		
+		public static function RunFile ( $file ) {
+			
+			if( null == self::$link )
+				return 'Not connected to a database.';
+			
+			if( ! file_exists( $file ) )
+				return 'File does not exist: ' . $file;
+			
+			$data = file_get_contents( $file );
+			$queries = explode( ';', $data );
+			foreach( $queries as $query ) {
+				if( empty( $query ) )
+					continue;
+
+				if( false === @mysql_query( trim( $query ), self::$link ) )
+					return mysql_error( self::$link );
+			}
+			
+			return true;
+		}
+		
+	} // Class Database
