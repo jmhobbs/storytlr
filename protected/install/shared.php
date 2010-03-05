@@ -1,94 +1,97 @@
 <?php
-	//! \todo Namespace/class this stuff.
 
-	$all_clear = true;
-	$root = dirname( __FILE__ ) . '/../../';
-	
-	function checks_ok () {
-		global $all_clear;
-		return $all_clear;
-	}
-	
-	function show_check_div ( $string, $class ) {
-		echo '<div class="' . $class . '">' . $string . '</div>';
-	}
+	class Check {
 
-	function good ( $string ) { show_check_div( $string, 'good' ); }
-	function bad ( $string ) { global $all_clear; $all_clear = false; show_check_div( $string, 'bad' ); }
-	function warn ( $string ) { show_check_div( $string, 'warn' ); }
+		protected static $errors = 0;
+		protected static $include_found = true;
 
-	// Check the level of php available
-	function check_php ( $required ) {
-		if( 1 == version_compare( $required, phpversion() ) )
-			bad( "Your PHP version is too low, the minimum required is $required." );
-		else
-			good( "PHP Version " . phpversion() . " meets requirement." );
-	}
+		public static function no_errors () {
+			return ( 0 == self::$errors );
+		}
 
-	function check_setting ( $setting, $expected ) {
-		if( $expected != ini_get( $setting ) )
-			bad( "PHP Setting '$setting' should be '". var_export( $expected, true ) . "'." );
-		else
-			good( "PHP Setting '$setting' is '" . var_export( $expected, true ) ."'." );
-	}
+		public static function error_count () {
+			return self::$errors;
+		}
 
-	// Check if a class exists
-	function check_class ( $class, $name, $warn_only=false ) {
-		if( class_exists( $class, false ) )
-			good( "Found $name." );
-		else if( $warn_only )
-			warn( "Can not find $name." );
-		else
-			bad( "Can not find $name." );
-	}
+		protected static function show_check_div ( $string, $class ) {
+			echo '<div class="' . $class . '">' . $string . '</div>';
+		}
 
-	// Check if a function exists.
-	function check_function ( $function, $name, $warn_only=false ) {
-		if( function_exists( $function ) )
-			good( "Found $name." );
-		else if( $warn_only )
-			warn( "Can not find $name." );
-		else
-			bad( "Can not find $name." );
-	}
+		public static function good ( $string ) { self::show_check_div( $string, 'good' ); }
+		public static function bad ( $string ) { self::$errors++; self::show_check_div( $string, 'bad' ); }
+		public static function warn ( $string ) { self::show_check_div( $string, 'warn' ); }
 
-	// Check if a file can be included, is on the path.
-	function check_include ( $include, $name, $warn_only=false ) {
-		global $include_found;
-		$include_found = true;
-		set_error_handler( 'include_error_handler', E_WARNING );
-		include_once( $include );
-		restore_error_handler();
-		if( $include_found )
-			good( "Found $name." );
-		else if( $warn_only )
-			warn( "Can not find $name." );
-		else
-			bad( "Can not find $name." );
-		return $include_found;
-	}
-	$include_found = true;
-	function include_error_handler ( $errno, $errstr ) {
-		global $include_found;
-		$include_found = false;
-	}
+		// Check the level of php available
+		public static function PHP ( $required ) {
+			if( 1 == version_compare( $required, phpversion() ) )
+				Check::bad( "Your PHP version is too low, the minimum required is $required." );
+			else
+				Check::good( "PHP Version " . phpversion() . " meets requirement." );
+		}
 
-	// Checks an extension existence by phpversion. Doesn't work for all extensions.
-	function check_extension ( $extension, $name, $warn_only=false ) {
-		if( false !== phpversion( $extension ) )
-			good( "Found $name." );
-		else if( $warn_only )
-			warn( "Can not find $name." );
-		else
-			bad( "Can not find $name." );
-	}
+		public static function SettingValue ( $setting, $expected ) {
+			if( $expected != ini_get( $setting ) )
+				Check::bad( "PHP Setting '$setting' should be '". var_export( $expected, true ) . "'." );
+			else
+				Check::good( "PHP Setting '$setting' is '" . var_export( $expected, true ) ."'." );
+		}
 
-	function check_writable( $path, $warn_only=false ) {
-		global $root;
-		if( is_writable( $root . $path ) )
-			good( "$path is writable." );
-		else if( $warn_only )
-			warn( "$path is not writable." );
-		else
-			bad( "$path is not writable." );
-	}
+		// Check if a class exists
+		public static function ClassExists ( $class, $name, $warn_only=false ) {
+			if( class_exists( $class, false ) )
+				Check::good( "Found $name." );
+			else if( $warn_only )
+				Check::warn( "Can not find $name." );
+			else
+				Check::bad( "Can not find $name." );
+		}
+
+		// Check if a function exists.
+		public static function FunctionExists ( $function, $name, $warn_only=false ) {
+			if( function_exists( $function ) )
+				Check::good( "Found $name." );
+			else if( $warn_only )
+				Check::warn( "Can not find $name." );
+			else
+				Check::bad( "Can not find $name." );
+		}
+
+		// Check if a file can be included, is on the path.
+		public static function CanInclude ( $include, $name, $warn_only=false ) {
+			self::$include_found = true;
+			set_error_handler( 'Check::include_error_handler', E_WARNING );
+			include_once( $include );
+			restore_error_handler();
+			if( self::$include_found )
+				Check::good( "Found $name." );
+			else if( $warn_only )
+				Check::warn( "Can not find $name." );
+			else
+				Check::bad( "Can not find $name." );
+			return self::$include_found;
+		}
+
+		protected static function include_error_handler ( $errno, $errstr ) {
+			self::$include_found = false;
+		}
+
+		// Checks an extension existence by phpversion. Doesn't work for all extensions.
+		public static function ExtensionExists ( $extension, $name, $warn_only=false ) {
+			if( false !== phpversion( $extension ) )
+				Check::good( "Found $name." );
+			else if( $warn_only )
+				Check::warn( "Can not find $name." );
+			else
+				Check::bad( "Can not find $name." );
+		}
+
+		public static function PathWritable ( $path, $warn_only=false ) {
+			$root = dirname( __FILE__ ) . '/../../';
+			if( is_writable( $root . $path ) )
+				Check::good( "$path is writable." );
+			else if( $warn_only )
+				Check::warn( "$path is not writable." );
+			else
+				Check::bad( "$path is not writable." );
+		}
+	} // Class Check

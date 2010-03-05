@@ -9,24 +9,24 @@
 ?>
 		<h2>Requirements Check</h2>
 <?php
-	check_php( "5.0" );
-	check_setting( "magic_quotes_gpc", false );
+	Check::PHP( "5.0" );
+	Check::SettingValue( "magic_quotes_gpc", false );
 
-	if( check_include( 'Zend/Version.php', 'Zend Framework' ) )
+	if( Check::CanInclude( 'Zend/Version.php', 'Zend Framework' ) )
 		if( Zend_Version::compareVersion( '1.0.0' ) > 0 )
 			warn( 'Zend Version 1.0.0 or newer is recommended' );
 
-	check_function( 'mcrypt_module_open', 'mcrypt' );
-	check_function( 'curl_init', 'cURL' );
-	check_extension( 'PDO', 'PDO' );
-	check_extension( 'tidy', 'Tidy');
+	Check::FunctionExists( 'mcrypt_module_open', 'mcrypt' );
+	Check::FunctionExists( 'curl_init', 'cURL' );
+	Check::ExtensionExists( 'PDO', 'PDO' );
+	Check::ExtensionExists( 'tidy', 'Tidy');
 
-	check_writable( 'protected/temp/' );
-	check_writable( 'protected/upload/' );
-	check_writable( 'protected/logs/' );
-	check_writable( 'protected/config/config.ini', true );
+	Check::PathWritable( 'protected/temp/' );
+	Check::PathWritable( 'protected/upload/' );
+	Check::PathWritable( 'protected/logs/' );
+	Check::PathWritable( 'protected/config/config.ini', true );
 
-	if( checks_ok() ):
+	if( Check::no_errors() ):
 ?>
 	<h2>Configuration</h2>
 	<form action="" method="POST">
