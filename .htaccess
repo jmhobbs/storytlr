@@ -11,9 +11,9 @@
 <IfModule rewrite_module>
 	# Rewrite rules for pretty URL
 	RewriteEngine on
-	RewriteCond %{REQUEST_FILENAME} !-f
 	# Do you have a directory that you want listable or to default to the index file?
 	# Use the following rule as a template:
 	# RewriteRule ^directoryname - [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule .* index.php
 </IfModule>
