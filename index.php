@@ -1,12 +1,27 @@
 <?php
-define("STORYTLR_VERSION","0.9.3.jmhobbs.dev");
+define("STORYTLR_VERSION","0.9.3.jmhobbs.installer");
+define("STORYTLR_VERSION_NUMBER",0.93);
 
 // Update after deployment for location of non-public files
 $root = dirname(__FILE__);
 
 // Run the install stuff if it is there.
-if( file_exists( $root . '/protected/install/index.php' ) ) {
-	require_once( $root . '/protected/install/index.php' );
+if( file_exists( $root . '/protected/install/install.php' ) ) {
+	$template = array();
+	ob_start();
+	$template['title'] = require_once( $root . '/protected/install/install.php' );
+	$template['content'] = ob_get_contents();
+	ob_end_clean();
+	require_once( $root . '/protected/install/template.php' );
+	exit();
+}
+
+if( ! file_exists( $root . '/protected/install/version/' . STORYTLR_VERSION_NUMBER ) ) {
+	ob_start();
+	$template['title'] = require_once( $root . '/protected/install/upgrade.php' );
+	$template['content'] = ob_get_contents();
+	ob_end_clean();
+	require_once( $root . '/protected/install/template.php' );
 	exit();
 }
 

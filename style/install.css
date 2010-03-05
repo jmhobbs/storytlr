@@ -1,0 +1,23 @@
+.good, .bad, .warn {
+	padding: 5px;
+	font-weight: bold;
+	text-shadow: 1px 1px 2px #AAA;
+	color: #FFF;
+}
+.good {
+	background-color: #00BF00;
+}
+.bad {
+	background-color: #BF2C00;
+}
+.warn {
+	background-color: #BFB900;
+}
+label {
+	display: inline-block;
+	width: 150px;
+	text-align: right;
+}
+legend {
+	font-weight: bold;
+}
