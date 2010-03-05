@@ -24,7 +24,6 @@ class GitoriousItem extends SourceItem {
 	protected $_preamble = 'Gitorious activity: ';
 
 	public function getContent() {
-		//! \todo The links still need love.
 		$content = $this->_data['content'];
 		$pars = explode( '</p>', $content );
 		if( 2 <= count( $pars ) && '' != trim( str_replace( '<p>', '', $pars[1] ) ) )
