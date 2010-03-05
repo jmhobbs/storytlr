@@ -2,3 +2,34 @@ There are several files here.  This is to facilitate moving between the official
 =========
 database.sql - For a fresh install, entirely from this codebase.
 migration-0.9.2.sql - Migrating from "official" 0.9.2 to this codebase.
+
+
+== [ New Install/Upgrade Branch Explanation] ==
+Here is the logic behind the new install/upgrade scripts.
+
+=== [ Install ] ===
+
+1. Enter index.php
+2. Look for protected/install/install.php
+3. If it exists, load it up.
+4. Check for protected/config/config.ini
+5. If that exists, bail out and ask that the user remove install.php
+6. Otherwise, check their requirements
+7. If it looks good, show them the form.
+8. On submit it all starts over again, except this time we take action.
+9. Meaning, we write to the DB and write the config file.
+
+=== [ Upgrade ] ===
+
+There is a new directory called protected/install/version.
+
+In this directory there should be a 0 byte file for each version we upgrade to.  So for a site that was installed as 0.9.2 and later upgraded to 0.9.3, there should be two files in this directory, protected/install/version/0.92 and protected/install/version/0.93
+
+The file names come from a new constant, STORYTLR_VERSION_NUMBER, which is used soley for this purpose, and is a comparable float version of the STORYTLR_VERSION constant.  To get a comparable float, I dropped the dot between the minor and micro revision numbers.
+
+Here is the proposed upgrade process:
+
+1. If the protected/install/version/STORYTLR_VERSION_NUMBER file does not exist, then...
+2. Load protected/install/upgrade.php
+3. Determine what the largest version number is in protected/install/version/
+4. Run all the migration scripts that are in protected/install/upgrade/
