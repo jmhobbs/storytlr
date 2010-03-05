@@ -36,7 +36,7 @@ class GitoriousModel extends SourceModel {
 	}
 
 	public function getServiceURL() {
-		return 'http://gitorious.org/' . $this->getProperty('username');
+		return 'http://gitorious.org/~' . $this->getProperty('username');
 	}
 
 	public function getServiceDescription() {
