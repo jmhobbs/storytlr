@@ -1,7 +1,7 @@
 .buildpath
 .project
 .settings
-config.ini
+protected/config/config.ini
 *.log
 protected/library/Zend
 protected/upload/**
