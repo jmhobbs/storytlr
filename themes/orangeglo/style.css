@@ -42,6 +42,10 @@ div.stories #content div.item_wrapper {
 	height: 60px;
 }
 
+#content > div.item_wrapper {
+	border-bottom: 1px solid #EEE;
+}
+
 div.item_comments {
 	margin: 0 0 25px 25px;
 }
@@ -151,10 +155,11 @@ div.tabMenu {
 }
 
 #content .date{
-	font-size: 20px;
+	font-size: 16px;
+	font-weight: bold;
 	padding: 5px;
 	background-color: transparent;
-	border-bottom: #cccccc 1px solid;
+	border-bottom: #cccccc 1px dashed;
 	color: #000000;
 	margin: 15px 0;
 }
@@ -211,30 +216,27 @@ body {
 	padding: 0;
 	color:#b9b9b9; 
 	font-family:Helvetica,Tahoma,Arial,sans-serif;
-	font-size: 16px;
+	font-size: 12px;
 	text-align: center;
-	background: url( 'images/background.png' ) repeat-x;
 }
 
 h2 {
 	color:#000000;
 	font-family: Helvetica, Sans-serif;
-	font-size: 15px;
+	font-size: 16px;
 	font-weight:bold;
-    letter-spacing:0.05em;
-    text-transform: uppercase;
 }
 
 a {
 	background-color:inherit; 
-	color:#53abd5; 
+	color:#E87F1D; 
 	font-weight:bold; 
 	text-decoration:none;
 }
 
 a:hover {
 	background-color:inherit; 
-	color:#53abd5; 
+	color:#FF8C20; 
 	font-weight:bold; 
 	text-decoration:underline;
 }
@@ -248,16 +250,18 @@ a img {
 */
 
 #pagewrapper {
-	margin: 20px 0;
-	background: #E5E5E5 url( 'images/page.png') repeat-y center center;
+	margin: 0;
+	background: #E5E5E5 url( 'images/background.png' ) repeat-x;
+	padding-top: 42px;
 }
 
 #page {
 	color: #333; 
 	width:760px;
 	margin:0 auto;
-	padding: 0 0 15px 0;
+	padding: 0 10px 15px;
 	text-align:left;
+	background: url( 'images/page.png') repeat-y center center;
 }
 
 #left-column {
@@ -274,7 +278,6 @@ a img {
 
 #header-wrapper {
 	height: 210px;
-	margin-top: 42px;
 	background: url( 'images/header.png' ) no-repeat;
 	border-bottom: 1px solid #CCC;
 }
@@ -297,13 +300,14 @@ a img {
 
 #header .description {
 	background-color:inherit; 
-	color:#777; 
-	font-size:1.1em; 
+	color:#676767; 
+	font-size:16px; 
 	font-weight:bold; 
 	line-height:1.3em; 
 	margin:0px 3px 0 18px; 
-	width:300px;
-	display: none;
+	position:relative;
+	top:90px;
+	left:30px;
 }
 
 div#login div {
