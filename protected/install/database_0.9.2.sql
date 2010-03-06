@@ -114,6 +114,39 @@ LOCK TABLES `delicious_data` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `scrnshots_data`
+--
+
+DROP TABLE IF EXISTS `scrnshots_data`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `scrnshots_data` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `source_id` int(10) unsigned NOT NULL,
+  `created_at` varchar(45) NOT NULL,
+  `title` text NOT NULL,
+  `description` text NOT NULL,
+  `link` varchar(256) NOT NULL,
+  `href` varchar(256) NOT NULL,
+  `thumbnail` varchar(256) NOT NULL,
+  `image` varchar(256) NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `DUPLICATES` USING BTREE (`source_id`,`link`),
+  FULLTEXT KEY `SEARCH` (`description`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `scrnshots_data`
+--
+
+LOCK TABLES `scrnshots_data` WRITE;
+/*!40000 ALTER TABLE `scrnshots_data` DISABLE KEYS */;
+/*!40000 ALTER TABLE `scrnshots_data` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+--
 -- Table structure for table `digg_data`
 --
 
@@ -475,6 +508,41 @@ LOCK TABLES `rss_data` WRITE;
 /*!40000 ALTER TABLE `rss_data` DISABLE KEYS */;
 /*!40000 ALTER TABLE `rss_data` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `launchpad_data`
+--
+
+DROP TABLE IF EXISTS `launchpad_data`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `launchpad_data` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `source_id` int(10) unsigned NOT NULL,
+  `link` varchar(256) NOT NULL,
+  `title` varchar(256) NOT NULL,
+  `content` text NOT NULL,
+  `branch_url` text NOT NULL,
+  `branch` text NOT NULL,
+  `revision` varchar(256) NOT NULL,
+  `project` varchar(256) NOT NULL,
+  `message` text NOT NULL,
+  `published` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`id`),
+  UNIQUE KEY `DUPLICATES` USING BTREE (`source_id`,`link`),
+  FULLTEXT KEY `SEARCH` (`title`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `launchpad_data`
+--
+
+LOCK TABLES `launchpad_data` WRITE;
+/*!40000 ALTER TABLE `launchpad_data` DISABLE KEYS */;
+/*!40000 ALTER TABLE `launchpad_data` ENABLE KEYS */;
+UNLOCK TABLES;
+
 
 --
 -- Table structure for table `seesmic_data`
