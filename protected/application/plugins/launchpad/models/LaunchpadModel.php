@@ -124,7 +124,7 @@ class LaunchpadModel extends SourceModel {
 				$data['message'] = $matches[5];
 
 				// Save the item in the database
-				$id = $this->addItem($data, $data['published'], SourceItem::OTHER_TYPE, false, false, false, $data['title']);
+				$id = $this->addItem($data, $data['published'], SourceItem::LINK_TYPE, false, false, false, $data['title']);
 				if ($id) $result[] = $id;
 				if (count($result)> 100) break;
 			} else {
