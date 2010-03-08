@@ -12,7 +12,7 @@ You can find more information about Storytlr online at <http://storytlr.googleco
 
 # What else is in this fork? #
 
-This fork is a working copy that  includes several patches not present in 0.9.2.  Eventually most of these changes will find their way into core.
+This fork is a working copy that includes several patches not present in 0.9.2.  Eventually most of these changes will find their way into core.
 
 * A tool to rename users (dangerous if not handled properly)
 * Plugins built in for...
@@ -22,10 +22,14 @@ This fork is a working copy that  includes several patches not present in 0.9.2.
   * [Stack Overflow](http://www.stackoverflow.com/)
   * [Twitter favorites](http://www.twitter.com/)
   * [Google Buzz](http://buzz.google.com/)
+  * [Launchpad] (http://launchpad.net/)
+  * [ScrnShots] (http://www.scrnshots.com/)
+  * [Gitorious] (http://gitorrious.org/)
+  * Perhaps others...
 * Ability to delete items that are from other sources (not just ones from Storytlr itself)
 * tidy is replaced by [htmLawed](http://code.google.com/p/htmlawed/)
 * Misc fixes for issues reported on the Google group
-* Misc fixes from other forks, esp. paths courtesy of [Stuart Herbert](http://github.com/stuartherbert)
+* Misc fixes from other forks
 
 # Installation #
 
