@@ -30,6 +30,10 @@ class RssModel extends SourceModel {
 		return "RSS";
 	}
 
+	public function getIcon() {
+		return $this->getProperty( 'icon', 'images/rss.png' );
+	}
+
 	public function isStoryElement() {
 		return true;
 	}

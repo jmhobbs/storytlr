@@ -42,7 +42,7 @@ class Widgets_LinksController extends Stuffpress_Controller_Widget
 			if ($source['service'] == 'stuffpress') continue;
 			$model = SourceModel::newInstance($source['service']);
 			$model->setSource($source);
-			$link['prefix'] = $model->getServicePrefix();
+			$link['icon'] = $model->getIcon();
 			$link['url'] = $model->getServiceURL();
 			$link['name'] = $model->getTitle();
 			$links[] = $link;
