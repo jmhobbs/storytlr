@@ -93,6 +93,9 @@ class GooglebuzzModel extends SourceModel {
 		$result = array();
 		foreach ($items as $item) {
 			$data = array();
+			//! \todo In the future, use atom:source => http://groups.google.com/group/google-buzz-api/browse_thread/thread/ac8b07ba5d0cc115/
+			if( 'from Buzz' != substr( $item->title, -9 ) )
+				continue; // We only want Buzz entries
 			$data['title'] = $item->title;
 			$data['published'] = strtotime( $item->published );
 			$data['content'] = $item->content;
