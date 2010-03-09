@@ -211,6 +211,31 @@ function onSelectTheme(theme) {
   					onFailure: onFailure.bind(this) });
 }
 
+function onSelectIconSet(icon_set) {
+
+	current_icon_set = icon_set;
+	
+	new Ajax.Request('admin/design/saveiconset', {
+  					method: 'post',
+  					
+  					parameters: {icon_set: icon_set},
+  					
+  					onSuccess: function(req) {
+								var error = req.responseText.evalJSON();
+								if( ! error ) {
+									$('icon_set_selected').writeAttribute('src', 'images/icons/' + icon_set + '/preview.png');
+									$('icon_set_selected_title').innerHTML = icon_sets[icon_set].title;
+									$('icon_set_selected_author').innerHTML = icon_sets[icon_set].author;
+									$('icon_set_selected_description').innerHTML = icon_sets[icon_set].description;
+								}
+								else {
+									alert("Error - try again or contact support@storytlr.com");
+								}
+							},
+								
+  					onFailure: onFailure.bind(this) });
+}
+
 function onFailure(req) {
 	alert("Error - try again or contact support@storytlr.com");
 }

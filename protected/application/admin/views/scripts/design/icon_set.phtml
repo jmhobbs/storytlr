@@ -1,0 +1,10 @@
+<div class='icon_set_preview'>
+	<b><?php if ($this->title) { echo $this->title; } else {echo $this->name;} ?></b>
+	<img id='icon_set_<?= $this->name ?>' class="icon_set" src="images/icons/<?= $this->name ?>/preview.png" onclick="onSelectIconSet('<?= $this->name ?>');" />
+	<?php if ($this->author) : ?>
+		<div class="icon_set_author">by <?= $this->author ?></div>
+	<?php endif ?>
+	<?php if ($this->description) : ?>
+		<div class="icon_set_description"><?= $this->description ?></div>
+	<?php endif ?>
+</div>

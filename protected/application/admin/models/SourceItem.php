@@ -74,7 +74,8 @@ abstract class SourceItem
 	}
 	
 	public function getIcon() {
-		return 'images/icons/' . Properties::getPropertyWithCache( 'icon_set', 'default' ) . '/' . $this->_prefix . '.png';
+		$user_id = SourceModel::getSourceModel( $this->getSource() )->getUserID();
+		return 'images/icons/' . Properties::getPropertyWithCache( $user_id, 'icon_set', 'default' ) . '/' . $this->_prefix . '.png';
 	}
 	
 	public function getSlug() {

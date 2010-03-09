@@ -20,7 +20,7 @@ abstract class Stuffpress_Db_Properties extends Stuffpress_Db_Table
 		if (!isset($this->_properties)) {
 			$this->getPropertiesFromDB();
 		}
-		
+
 		if (isset($this->_properties[$key])) {
 			return $this->_properties[$key];
 		}

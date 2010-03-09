@@ -1112,3 +1112,37 @@ div.sns_config {
 	margin: 0;
 	padding: 0;
 }
+
+/* Icon Set Form */
+img.icon_setSelected {
+	max-width: 250px;
+	border: 2px solid #ccc;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+div.icon_set_preview {
+	width: 175px;
+	height: 215px;
+	margin: 10px 10px 10px 0px;
+	float: left;
+}
+
+div.icon_set_author {
+	font-size: 80%;
+	color: #999;
+}
+
+div.icon_set_description {
+	font-size: 90%;
+	color: #333;
+}
+
+div.icon_set_preview img {
+	max-width: 175px;
+	border: 1px solid #ccc;
+}
+
+img.icon_set:hover {
+	border: 1px solid #2a89c5;
+}

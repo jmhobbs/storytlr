@@ -25,6 +25,16 @@ function onDesignLoad() {
 }
 </script>
 
+<script type="text/javascript">
+	var icon_sets = new Object();
+	<?php foreach( $this->icon_sets as $icon_set ): ?>
+		icon_sets['<?= $icon_set['name'] ?>'] = new Object();
+		icon_sets['<?= $icon_set['name'] ?>'].title = "<?= addslashes( $icon_set['title'] ); ?>";
+		icon_sets['<?= $icon_set['name'] ?>'].author = "<?= addslashes( $icon_set['author'] ); ?>";
+		icon_sets['<?= $icon_set['name'] ?>'].description = "<?= addslashes( $icon_set['description'] ); ?>";
+	<?php endforeach; ?>
+</script>
+
 <script type='text/javascript'>
 var themes = new Object();
 <?php foreach ($this->themes as $t) : ?>
@@ -195,3 +205,29 @@ var colors = new Object();
 	</tr>
 </table>
 
+<table>
+	<tr>
+		<td class="label"><label class="optional" for="icon_set">Icon Set</label></td>
+		<td>
+			<img id="icon_set_selected" class="iconSetSelected" src="images/icons/<?= $this->icon_set ?>/preview.png"/>
+		</td>
+		<td style="vertical-align: top;">
+			<div class='icon_set_preview'>
+				<?php $icon_set = $this->icon_sets[$this->icon_set]; ?>
+				<b  id="icon_set_selected_title" class="icon_set_title"><?php if ($icon_set['title']) { echo $icon_set['title']; } else {echo $icon_set['name'];} ?></b>
+				<div id="icon_set_selected_author" class="icon_set_author">by <?php if ($icon_set['author']) { echo $icon_set['author']; } ?></div>
+				<div  id="icon_set_selected_description" class="icon_set_description"><?php if ($icon_set['description']) { echo $icon_set['description']; } ?></div>
+			</div>
+		</td>
+	</tr>
+	<tr>
+		<td></td>
+		<td colspan="2">
+			Click picture to select another icon set<br/>
+			<?php
+				foreach( $this->icon_sets as $icon_set )
+					echo $this->partial( 'design/icon_set.phtml', $icon_set ); 
+			?>
+		</td>
+	</tr>
+</table>

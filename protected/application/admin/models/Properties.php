@@ -32,12 +32,13 @@ class Properties extends Stuffpress_Db_Properties
 		}
 	}
 	
-	public static function getPropertyWithCache ( $property, $default = false ) {
-		if( ! isset( Properties::$_property_cache[$property] ) ) {
-			$properties = new Properties();
-			Properties::$_property_cache[$property] = $properties->getProperty( $property, $default );
+	public static function getPropertyWithCache ( $user_id, $property, $default = false ) {
+		$key = "$user_id:$property";
+		if( ! isset( Properties::$_property_cache[$key] ) ) {
+			$properties = new Properties( array( Stuffpress_Db_Properties::KEY => $user_id ) );
+			Properties::$_property_cache[$key] = $properties->getProperty( $property, $default );
 		}
-		return Properties::$_property_cache[$property];
+		return Properties::$_property_cache[$key];
 	}
 	
 }

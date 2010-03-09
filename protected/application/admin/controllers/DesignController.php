@@ -54,6 +54,10 @@ class Admin_DesignController extends Admin_BaseController
 		$this->view->themes = Themes::getAvailableThemes();
 		$this->view->theme	= $this->_properties->getProperty('theme');
 		
+		// Get available icon sets
+		$this->view->icon_sets = IconSets::getAvailableIconSets();
+		$this->view->icon_set  = $this->_properties->getProperty( 'icon_set', 'default' );
+		
 		// Custom css & colors
 		$this->view->css_enabled = $values['css_enabled'];
 		$this->view->css_content = $values['css_content'];
@@ -150,7 +154,15 @@ class Admin_DesignController extends Admin_BaseController
 		// Done
 		return $this->_helper->json->sendJson(false);
 	}
-	
+
+	public function saveiconsetAction() {
+		if( $icon_set = $this->_getParam( 'icon_set' ) ) {
+			$this->_properties->setProperty( 'icon_set', $icon_set['name'] );
+			return $this->_helper->json->sendJson( false );
+		}
+		return $this->_helper->json->sendJson( true );
+	}
+
 	public function savecssAction()
 	{
 		// Validate the form and extract the values
@@ -280,4 +292,5 @@ class Admin_DesignController extends Admin_BaseController
 		
 		return $form;
 	}
+
 }
