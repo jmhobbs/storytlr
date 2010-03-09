@@ -1,6 +1,7 @@
 <?php
 /*
- *    Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2008-2009 Laurent Eschenauer and Alard Weisscher
+ *  Copyright 2010 John Hobbs
  *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
@@ -18,6 +19,8 @@
 
 class Properties extends Stuffpress_Db_Properties
 {
+	private static $_property_cache = array();
+
 	protected $_name = 'properties';
 
 	protected $_primary = 'user_id';
@@ -28,4 +31,13 @@ class Properties extends Stuffpress_Db_Properties
 			return 	$config->default->$key;
 		}
 	}
+	
+	public static function getPropertyWithCache ( $property, $default = false ) {
+		if( ! isset( Properties::$_property_cache[$property] ) ) {
+			$properties = new Properties();
+			Properties::$_property_cache[$property] = $properties->getProperty( $property, $default );
+		}
+		return Properties::$_property_cache[$property];
+	}
+	
 }
