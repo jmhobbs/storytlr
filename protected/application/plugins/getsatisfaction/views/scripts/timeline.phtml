@@ -1,0 +1,6 @@
+<div class="getsatisfaction">
+	<div class="title"><a href="<?= $this->item->getLink(); ?>" target="_blank"><?= $this->item->getTitle(); ?></a></div>
+	<?php if( $this->item->hasContent() ) { ?>
+	<div class="content"><?= $this->item->getContent(); ?></div>
+	<?php } ?>
+</div>
