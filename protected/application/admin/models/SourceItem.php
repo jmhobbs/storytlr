@@ -74,7 +74,7 @@ abstract class SourceItem
 	}
 	
 	public function getIcon() {
-		return 'images/' . $this->_prefix . '.png';
+		return 'images/icons/' . Properties::getPropertyWithCache( 'icon_set', 'default' ) . '/' . $this->_prefix . '.png';
 	}
 	
 	public function getSlug() {

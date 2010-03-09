@@ -70,7 +70,7 @@ abstract class SourceModel extends Stuffpress_Db_Table
 	}
 	
 	public function getIcon() {
-		return 'images/' . $this->_prefix . '.png';
+		return 'images/icons/' . Properties::getPropertyWithCache( 'icon_set', 'default' ) . '/' . $this->_prefix . '.png';
 	}
 	
 	public function getServicePrefix() {
