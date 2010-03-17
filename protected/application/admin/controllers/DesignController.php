@@ -157,7 +157,7 @@ class Admin_DesignController extends Admin_BaseController
 
 	public function saveiconsetAction() {
 		if( $icon_set = $this->_getParam( 'icon_set' ) ) {
-			$this->_properties->setProperty( 'icon_set', $icon_set['name'] );
+			$this->_properties->setProperty( 'icon_set', $icon_set );
 			return $this->_helper->json->sendJson( false );
 		}
 		return $this->_helper->json->sendJson( true );
