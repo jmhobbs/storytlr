@@ -14,6 +14,12 @@
 		'config_username' => 'admin'
 	);
 	
+	if( isset( $_GET['config'] ) ) {
+		header( 'Content-type: text/plain' );
+		header( 'Content-Disposition: attachment; filename="config.ini"' );
+		die( $_SESSION['config'] );
+	}
+	
 	if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$form_values = $_POST;
 		
@@ -56,6 +62,14 @@
 					throw new Exception( 'Error loading database data:<br/><div class="nested-error">' . $res . '</div>' );
 					
 				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database data.' );
+				
+				//! \todo Build the data array...
+				if( Config::SaveFile( $root . '/protected/install/config.ini.template', $root . '/protected/config/config.ini', array() ) )
+					Check::good( '[' . date( 'H:i:s' ) .'] Saved config file.' );
+				else {
+					$_SESSION['config'] = Config::RenderFile( $root . '/protected/install/config.ini.template', array() );
+					Check::warn( "Could not write config.ini.<br/>Please below to download your config file and place it in <tt>protected/config/</tt>.<br/><a href=\"?config\">Download config.ini</a>");
+				}
 				
 				return 'Installation';
 			}

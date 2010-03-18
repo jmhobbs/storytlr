@@ -170,3 +170,27 @@
 		}
 		
 	} // Class Database
+	
+	class Config {
+	
+		public static function RenderFile ( $template_file, $substitutions ) {
+			
+			if( ! file_exists( $template_file ) )
+				return false;
+			
+			$data = file_get_contents( $template_file );
+			foreach( $substitutions as $key => $value )
+				$data = str_replace( "[:$key]", mysql_real_escape_string( $value, self::$link ), $data );
+
+			return $data;
+		}
+		
+		public static function SaveFile ( $template_file, $dest, $substitutions ) {
+			$contents = Config::RenderFile( $template_file, $substitutions );
+
+			if( false === $contents )
+				return false;
+			return ( false !== @file_put_contents( $dest, $contents ) );
+		}
+		
+	}
