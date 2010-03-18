@@ -6,13 +6,14 @@
 		return 'Installation';
 	}
 
+	// Preset some variables...
 	$form_errors = array();
 	$form_values = array(
 		'mysql_host' => 'localhost',
 		'mysql_database' => 'storytlr',
 		'config_username' => 'admin'
 	);
-
+	
 	if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$form_values = $_POST;
 		
@@ -42,6 +43,7 @@
 				Check::good( '[' . date( 'H:i:s' ) .'] Connected to database.' );
 				
 				$res = Database::RunFile( $root . '/protected/install/schema.sql' );
+				
 				if( true !== $res )
 					throw new Exception( 'Error loading database schema:<br/><div class="nested-error">' . $res . '</div>' );
 				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database schema.' );
@@ -54,6 +56,7 @@
 		}
 		catch ( Exception $e ) {
 			Check::bad( $e->getMessage() );
+			Check::restart();
 		}
 		
 	}
@@ -70,13 +73,12 @@
 	Check::FunctionExists( 'mcrypt_module_open', 'mcrypt' );
 	Check::FunctionExists( 'curl_init', 'cURL' );
 	Check::ExtensionExists( 'PDO', 'PDO' );
-	Check::ExtensionExists( 'tidy', 'Tidy');
 
 	Check::PathWritable( 'protected/temp/' );
 	Check::PathWritable( 'protected/upload/' );
 	Check::PathWritable( 'protected/logs/' );
 	Check::PathWritable( 'protected/install/version/' );
-	Check::PathWritable( 'protected/config/config.ini', true );
+	Check::PathWritable( 'protected/config/', true );
 
 	if( Check::no_errors() ):
 		$form = new Form( $form_errors, $form_values );
@@ -100,7 +102,7 @@
 			?>
 		</fieldset>
 		<fieldset>
-			<legend>API Keys</legend>
+			<legend>API Keys (optional)</legend>
 			<?php
 				$form->text( 'config', 'google_maps_api_key' );
 				$form->text( 'config', 'flickr_api_key' );

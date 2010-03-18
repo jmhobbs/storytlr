@@ -6,7 +6,11 @@
 		protected static $include_found = true;
 
 		public static function no_errors () {
-			return true;//( 0 == self::$errors );
+			return ( 0 == self::$errors );
+		}
+
+		public static function restart () {
+			self::$errors = 0;
 		}
 
 		public static function error_count () {
@@ -149,11 +153,12 @@
 			
 			$data = file_get_contents( $file );
 			$queries = explode( ';', $data );
+			
 			foreach( $queries as $query ) {
 				if( empty( $query ) )
 					continue;
 
-				if( false === @mysql_query( trim( $query ), self::$link ) )
+				if( false === mysql_query( trim( $query ), self::$link ) )
 					return mysql_error( self::$link );
 			}
 			
