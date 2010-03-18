@@ -46,7 +46,16 @@
 				
 				if( true !== $res )
 					throw new Exception( 'Error loading database schema:<br/><div class="nested-error">' . $res . '</div>' );
+
 				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database schema.' );
+				
+				$subs = array( 'username' => $_POST['config_username'], 'userpass' => md5( $_POST['config_password'] ) );
+				$res = Database::RunFile( $root . '/protected/install/data.sql', $subs );
+				
+				if( true !== $res )
+					throw new Exception( 'Error loading database data:<br/><div class="nested-error">' . $res . '</div>' );
+					
+				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database data.' );
 				
 				return 'Installation';
 			}

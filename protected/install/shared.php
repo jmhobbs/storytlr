@@ -143,7 +143,7 @@
 			return true;
 		}
 		
-		public static function RunFile ( $file ) {
+		public static function RunFile ( $file, $substitutions = array() ) {
 			
 			if( null == self::$link )
 				return 'Not connected to a database.';
@@ -152,9 +152,13 @@
 				return 'File does not exist: ' . $file;
 			
 			$data = file_get_contents( $file );
+			foreach( $substitutions as $key => $value )
+				$data = str_replace( "[:$key]", mysql_real_escape_string( $value, self::$link ), $data );
+
 			$queries = explode( ';', $data );
 			
 			foreach( $queries as $query ) {
+				$query = trim( $query );
 				if( empty( $query ) )
 					continue;
 
