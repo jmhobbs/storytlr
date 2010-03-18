@@ -98,7 +98,7 @@
 				$data['published'] = strtotime( $item->published );
 				$data['content'] = $item->summary;
 				$data['link'] = $item->link['href'];
-				$data['stackoverflow_id'] = md5( $item->id );
+				$data['stackoverflow_id'] = md5( array_shift(explode(' ', $item->title)) == 'Comment' ? $item->published : $item->id );
 				$id = $this->addItem( $data, $data['published'], SourceItem::LINK_TYPE, false, false, false, $data['title'] );
 				if ( $id ) $result[] = $id;
 			}
