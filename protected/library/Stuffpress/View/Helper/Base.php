@@ -22,7 +22,7 @@ class Stuffpress_View_Helper_Base
 	// Returns the full URL to the current page
 	public function thisUrl() {
 		$host	= Zend_Controller_Front::getInstance()->getRequest()->get('SERVER_NAME');
-		$base	= Zend_Controller_Front::getInstance()->getRequest()->getBaseUrl();
+		$base	= str_replace( 'index.php', '', Zend_Controller_Front::getInstance()->getRequest()->getBaseUrl() );
 		return trim("http://{$host}{$base}", '/');
 	}
 	
