@@ -20,7 +20,7 @@ CREATE TABLE `data` (
   `service` varchar(45) NOT NULL,
   `type` varchar(45) default NULL,
   `timestamp` datetime NOT NULL,
-  `is_unwanted` TINYINT(1)  NOT NULL DEFAULT '0',
+	`is_unwanted` TINYINT(1)  NOT NULL DEFAULT 0,
   `is_hidden` tinyint(1) NOT NULL default '0',
   `user_id` int(10) unsigned NOT NULL,
   `comment_count` int(11) NOT NULL default '0',
@@ -48,7 +48,6 @@ CREATE TABLE `delicious_data` (
   UNIQUE KEY `DUPLICATES` USING BTREE (`source_id`,`link`),
   FULLTEXT KEY `SEARCH` (`title`,`subject`,`description`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `digg_data`;
 CREATE TABLE `digg_data` (
@@ -158,18 +157,13 @@ CREATE TABLE `pages` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
-
-INSERT INTO `pages` VALUES (1,1,'lifestream','Stream',0),(2,1,'stories','Stories',0);
-
 DROP TABLE IF EXISTS `pages_properties`;
-SET character_set_client = utf8;
 CREATE TABLE `pages_properties` (
   `page_id` int(10) unsigned NOT NULL,
   `key` varchar(45) NOT NULL,
   `value` text NOT NULL,
   PRIMARY KEY  (`page_id`,`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `picasa_data`;
 CREATE TABLE `picasa_data` (
@@ -195,9 +189,6 @@ CREATE TABLE `properties` (
   PRIMARY KEY  USING BTREE (`user_id`,`key`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
-
-INSERT INTO `properties` VALUES (1,'theme','clouds'),(1,'title','Welcome'),(1,'subtitle','to the online me'),(1,'stuffpress_source','1');
-
 DROP TABLE IF EXISTS `qik_data`;
 CREATE TABLE `qik_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
@@ -213,7 +204,6 @@ CREATE TABLE `qik_data` (
   UNIQUE KEY `DUPLICATES` (`source_id`,`urlflv`),
   FULLTEXT KEY `SEARCH` (`title`,`description`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `rss_data`;
 CREATE TABLE `rss_data` (
@@ -258,10 +248,7 @@ CREATE TABLE `sources` (
   PRIMARY KEY  USING BTREE (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
-INSERT INTO `sources` VALUES (1,1,'stuffpress',1,1,1,'2009-12-03 22:19:18');
-
 DROP TABLE IF EXISTS `sources_properties`;
-
 CREATE TABLE `sources_properties` (
   `source_id` int(10) unsigned NOT NULL auto_increment,
   `key` varchar(128) NOT NULL,
@@ -440,8 +427,6 @@ CREATE TABLE `widgets` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
-INSERT INTO `widgets` VALUES (1,1,'search',0),(2,1,'rsslink',0),(3,1,'links',0),(4,1,'lastcomments',0),(5,1,'archives',0),(6,1,'logo',0);
-
 DROP TABLE IF EXISTS `widgets_properties`;
 CREATE TABLE `widgets_properties` (
   `widget_id` int(10) unsigned NOT NULL,
@@ -495,7 +480,6 @@ CREATE TABLE `foursquare_data` (
   UNIQUE KEY `DUPLICATES` USING BTREE (`source_id`, `guid`),
   FULLTEXT KEY `SEARCH` (`content`,`title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
 
 DROP TABLE IF EXISTS `goodreads_data`;
 CREATE TABLE `goodreads_data` (
