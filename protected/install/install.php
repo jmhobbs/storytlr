@@ -13,16 +13,16 @@
 		'mysql_database' => 'storytlr',
 		'config_username' => 'admin'
 	);
-	
+
 	if( isset( $_GET['config'] ) ) {
 		header( 'Content-type: text/plain' );
 		header( 'Content-Disposition: attachment; filename="config.ini"' );
 		die( $_SESSION['config'] );
 	}
-	
+
 	if( $_SERVER['REQUEST_METHOD'] == 'POST' ) {
 		$form_values = $_POST;
-		
+
 		// Validation
 		$required = array(
 			'mysql_host',
@@ -34,7 +34,7 @@
 			if( empty( $_POST[$field] ) )
 				$form_errors[$field] = 'Field is required.';
 		}
-		
+
 		// Installation
 		try {
 			if( 0 == count( $form_errors ) ) {
@@ -47,30 +47,50 @@
 					throw new Exception( $res );
 				}
 				Check::good( '[' . date( 'H:i:s' ) .'] Connected to database.' );
-				
+
 				$res = Database::RunFile( $root . '/protected/install/schema.sql' );
-				
+
 				if( true !== $res )
 					throw new Exception( 'Error loading database schema:<br/><div class="nested-error">' . $res . '</div>' );
 
 				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database schema.' );
-				
+
 				$subs = array( 'username' => $_POST['config_username'], 'userpass' => md5( $_POST['config_password'] ) );
 				$res = Database::RunFile( $root . '/protected/install/data.sql', $subs );
-				
+
 				if( true !== $res )
 					throw new Exception( 'Error loading database data:<br/><div class="nested-error">' . $res . '</div>' );
-					
+
 				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database data.' );
-				
-				//! \todo Build the data array...
-				if( Config::SaveFile( $root . '/protected/install/config.ini.template', $root . '/protected/config/config.ini', array() ) )
+
+				$substitutions = array(
+					'mysql_host'         => $_POST['mysql_host'],
+					'mysql_database'     => $_POST['mysql_database'],
+					'mysql_password'     => $_POST['mysql_password'],
+					'mysql_username'     => $_POST['mysql_user'],
+					'security_cookie'    => sha1( time() . $_SERVER['SERVER_NAME'] ),
+					'host'               => $_SERVER['SERVER_NAME'],
+					'path'               => $_SERVER['REQUEST_URI'], // TODO: This isn't very good...
+					'user'               => $_POST['config_username'],
+					'flickr_comment'     => ( empty( $_POST['config_flickr_api_key'] ) ) ? ';' : '',
+					'flickr_key'         => $_POST['config_flickr_api_key'],
+					'google_map_comment' => ( empty( $_POST['config_google_maps_api_key'] ) ) ? ';' : '',
+					'google_map_key'     => $_POST['config_google_maps_api_key']
+				);
+
+				if( Config::SaveFile( $root . '/protected/install/config.ini.template', $root . '/protected/config/config.ini', $substitutions ) )
 					Check::good( '[' . date( 'H:i:s' ) .'] Saved config file.' );
 				else {
-					$_SESSION['config'] = Config::RenderFile( $root . '/protected/install/config.ini.template', array() );
+					$_SESSION['config'] = Config::RenderFile( $root . '/protected/install/config.ini.template', $substitutions );
 					Check::warn( "Could not write config.ini.<br/>Please below to download your config file and place it in <tt>protected/config/</tt>.<br/><a href=\"?config\">Download config.ini</a>");
 				}
-				
+
+				print "<p>Installation Complete!</p>";
+
+				print "<p>Please remove or rename protected/install/install.php</p>";
+
+				print '<p>Go To: <a href="http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']. '/admin">Administration</a> or <a href="http://' . $_SERVER['SERVER_NAME'] . $_SERVER['REQUEST_URI']. '">Front Page</a></p>';
+
 				return 'Installation';
 			}
 			else {
@@ -81,7 +101,7 @@
 			Check::bad( $e->getMessage() );
 			Check::restart();
 		}
-		
+
 	}
 ?>
 	<h2>Requirements Check</h2>

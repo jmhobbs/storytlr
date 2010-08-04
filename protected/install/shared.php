@@ -133,10 +133,10 @@
 		public static function connect ( $host, $db, $user, $password ) {
 			$link = @mysql_connect( $host, $user, $password );
 			if( ! $link )
-				return 'Could not connect to host: ' . mysql_error( $link );
+				return 'Could not connect to host: ' . mysql_error();
 
 			if( ! @mysql_select_db( $db, $link ) )
-				return 'Could not select database: ' . mysql_error( $link );
+				return 'Could not select database: ' . mysql_error();
 			
 			self::$link = $link;
 			
@@ -163,7 +163,7 @@
 					continue;
 
 				if( false === mysql_query( trim( $query ), self::$link ) )
-					return mysql_error( self::$link );
+					return mysql_error();
 			}
 			
 			return true;
@@ -174,13 +174,13 @@
 	class Config {
 	
 		public static function RenderFile ( $template_file, $substitutions ) {
-			
+		
 			if( ! file_exists( $template_file ) )
 				return false;
-			
+
 			$data = file_get_contents( $template_file );
 			foreach( $substitutions as $key => $value )
-				$data = str_replace( "[:$key]", mysql_real_escape_string( $value, self::$link ), $data );
+				$data = str_replace( "[:$key]", $value, $data );
 
 			return $data;
 		}
