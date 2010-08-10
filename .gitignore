@@ -4,6 +4,3 @@
 protected/config/config.ini
 *.log
 protected/library/Zend
-protected/upload/**
-protected/temp/**
-protected/logs/**
