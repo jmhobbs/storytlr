@@ -110,7 +110,8 @@
 		public function input ( $type, $set, $name, $label = null ) {
 			$label = ( is_null( $label ) ? ucwords( str_replace( '_', ' ', $name ) ) : $label );
 			$iname =  $set . '_' . $name;
-			print '<label for="' . $iname . '">'. $label . ':</label> <input type="' . $type . '" id="'. $iname . '" name="' . $iname . '" value="' . ( ( 'password' == $type ) ? '' : $this->values[$iname] ) . '"/>';
+			$value = isset($this->values[$iname]) ? $this->values[$iname] : '';
+			print '<label for="' . $iname . '">'. $label . ':</label> <input type="' . $type . '" id="'. $iname . '" name="' . $iname . '" value="' . ( ( 'password' == $type ) ? '' : $value ) . '"/>';
 			if( isset( $this->errors[$iname] ) )
 				print '<div class="install-error">' . $this->errors[$iname] . '</div>';
 			print '<br/>';
@@ -167,6 +168,29 @@
 			}
 			
 			return true;
+		}
+		
+		public static function RunFolder ($folder, $substitutions = array() ) {
+			if (!is_dir($folder)) {
+				return "Not a folder: $folder.";
+			}
+			
+			if (!$handle = opendir($folder)) {
+				return "Could not open folder $folder.";
+			}
+			
+		    while (false !== ($file = readdir($handle))) {
+		    	if ($file != "." && $file != "..") {
+        			$res = Database::RunFile($folder . "/" . $file, $substitutions);
+        			if (true !== $res) {
+        				return $res;
+        			}
+		    	}
+    		}
+
+    		closedir($handle);
+    		
+    		return true;
 		}
 		
 	} // Class Database

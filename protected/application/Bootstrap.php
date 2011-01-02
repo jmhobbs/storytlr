@@ -18,7 +18,7 @@
  */
 
 // Zend includes
-require_once 'Zend/Loader.php';
+require_once 'Zend/Loader/Autoloader.php';
 require_once 'Zend/Registry.php';
 require_once 'Zend/Config/Ini.php';
 require_once 'Zend/Controller/Front.php';
@@ -88,7 +88,6 @@ class Bootstrap
 	{
 		self::checkEnvironment();
 		self::setupEnvironment();
-		Zend_Loader::registerAutoload();
 		self::setupRegistry();
 		self::setupConfiguration();
 		self::setupLogger();
@@ -123,6 +122,10 @@ class Bootstrap
 		ini_set('user_agent', 'Storytlr/1.0');
 		mb_internal_encoding("UTF-8");
 		self::$root = dirname(dirname(__FILE__));
+		
+		// Setup Zend autoloader
+		$loader = Zend_Loader_Autoloader::getInstance();
+		$loader->setFallbackAutoloader(true);
 	}
 
 	public static function setupRegistry()
@@ -358,8 +361,8 @@ class Bootstrap
 		);
 
 		$router->addRoute(
-		'surl',
-		new Zend_Controller_Router_Route('/surl/:hash', array('module' => 'public', 'controller' => 'shorturl', 'action' => 'index'))
+		's',
+		new Zend_Controller_Router_Route('/s/:token', array('module' => 'public', 'controller' => 'shorturl', 'action' => 'index'))
 		);
 			
 		$router->addRoute(

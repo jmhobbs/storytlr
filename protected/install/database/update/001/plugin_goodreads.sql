@@ -1,7 +1,6 @@
-DROP TABLE IF EXISTS `goodreads_data`;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-CREATE TABLE `goodreads_data` (
+CREATE TABLE IF NOT EXISTS `goodreads_data` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `source_id` int(10) unsigned NOT NULL,
   `guid` varchar(255) NOT NULL,

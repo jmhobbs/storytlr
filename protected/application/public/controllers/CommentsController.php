@@ -131,7 +131,7 @@ class CommentsController extends BaseController
 		
 		// Validate the website URL
 		$matches = array();
-		if (!preg_match_all("/^http/", $website, $matches)) {
+		if ($website && !preg_match_all("/^http/", $website, $matches)) {
 			$website = "http://$website";
 		}
 
@@ -140,18 +140,23 @@ class CommentsController extends BaseController
 		$comments->addComment($source_id, $item_id, $comment, $name, $email, $website, $timestamp, $notify);
 
 		// Send an email alert to owner
-		$on_comment		= $this->_properties->getProperty('on_comment');
-		$owner			= ($this->_application->user && $this->_application->user->email == $email) ? true : false;
-		if ($on_comment && !$owner) {
-			$slug = $item->getSlug();
-			Stuffpress_Emails::sendCommentEmail($user->email, $user->username, $name, $email, $comment, $slug);
-		}
-		
-		// Send email alerts to everyone else (skip owner and current submiter)
-		$subscribers 	= $comments->getSubscriptions($source_id, $item_id);
-		foreach($subscribers as $subscriber) {
-			if ($subscriber['email'] == $user->email || $subscriber['email'] == $email) continue;
-			 Stuffpress_Emails::sendCommentNotifyEmail($subscriber['email'], $subscriber['name'], $name, $comment, $source_id, $item_id);
+		try {
+			$on_comment		= $this->_properties->getProperty('on_comment');
+			$owner			= ($this->_application->user && $this->_application->user->email == $email) ? true : false;
+			if ($on_comment && !$owner) {
+				$slug = $item->getSlug();
+				Stuffpress_Emails::sendCommentEmail($user->email, $user->username, $name, $email, $comment, $slug);
+			}
+			
+			// Send email alerts to everyone else (skip owner and current submiter)
+			$subscribers 	= $comments->getSubscriptions($source_id, $item_id);
+			foreach($subscribers as $subscriber) {
+				if ($subscriber['email'] == $user->email || $subscriber['email'] == $email) continue;
+				 Stuffpress_Emails::sendCommentNotifyEmail($subscriber['email'], $subscriber['name'], $name, $comment, $source_id, $item_id);
+			}
+		} catch (Exception $e) {
+			$logger	= Zend_Registry::get("logger");
+			$logger->log("Sending comment notification exception: " . $e->getMessage(), Zend_Log::ERR);
 		}
 		
 		// Ok send the result
@@ -212,7 +217,7 @@ class CommentsController extends BaseController
 			// Create and configure username element:
 			$name = $form->createElement('text', 'name',  array('label' => 'Name:', 'decorators' => $form->elementDecorators));
 			$name->addFilter('StringToLower');
-			$name->addValidator('alnum');
+			$name->addFilter('StripTags');
 			$name->addValidator('stringLength', false, array(4, 20));
 			$name->setRequired(true);
 	

@@ -28,7 +28,13 @@
 			'mysql_host',
 			'mysql_database',
 			'mysql_user',
+<<<<<<< HEAD
 			'mysql_password'
+=======
+			'mysql_password',
+			'config_username',
+			'config_password'
+>>>>>>> core-master
 		);
 		foreach( $required as $field ) {
 			if( empty( $_POST[$field] ) )
@@ -48,15 +54,29 @@
 				}
 				Check::good( '[' . date( 'H:i:s' ) .'] Connected to database.' );
 
+<<<<<<< HEAD
 				$res = Database::RunFile( $root . '/protected/install/schema.sql' );
+=======
+				$res = Database::RunFolder($root . '/protected/install/database/schema/' );
+>>>>>>> core-master
 
 				if( true !== $res )
 					throw new Exception( 'Error loading database schema:<br/><div class="nested-error">' . $res . '</div>' );
 
+<<<<<<< HEAD
 				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database schema.' );
 
 				$subs = array( 'username' => $_POST['config_username'], 'userpass' => md5( $_POST['config_password'] ) );
 				$res = Database::RunFile( $root . '/protected/install/data.sql', $subs );
+=======
+				// Save the new version
+				@file_put_contents( $root . '/protected/install/database/version', DATABASE_VERSION);	
+					
+				Check::good( '[' . date( 'H:i:s' ) .'] Loaded database schema.' );
+
+				$subs = array( 'username' => $_POST['config_username'], 'userpass' => md5( $_POST['config_password'] ) );
+				$res = Database::RunFile( $root . '/protected/install/database/data/add_user.sql', $subs );
+>>>>>>> core-master
 
 				if( true !== $res )
 					throw new Exception( 'Error loading database data:<br/><div class="nested-error">' . $res . '</div>' );
@@ -120,7 +140,11 @@
 	Check::PathWritable( 'protected/temp/' );
 	Check::PathWritable( 'protected/upload/' );
 	Check::PathWritable( 'protected/logs/' );
+<<<<<<< HEAD
 	Check::PathWritable( 'protected/install/version/' );
+=======
+	Check::PathWritable( 'protected/install/database/' );
+>>>>>>> core-master
 	Check::PathWritable( 'protected/config/', true );
 
 	if( Check::no_errors() ):
@@ -157,7 +181,7 @@
 	else:
 ?>
 	<p>Please fix the above issues before continuing.</p>
-	<form action=""><input type="submit" value="Check Again" onclick="this.disabled = true; this.value = 'Please Wait...';" /></form>
+	<!--  <form action=""><input type="submit" value="Check Again" onclick="this.disabled = true; this.value = 'Please Wait...';" /></form> -->
 <?php
 	endif;
 	return 'Installation';
